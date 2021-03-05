@@ -16,3 +16,4 @@ $ sh docker/exec.sh
 ## Structure
 
 ## TODO
+[] FP16
