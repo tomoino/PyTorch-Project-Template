@@ -1,6 +1,5 @@
 #!/bin/sh
-IMAGE_NAME=my_pytorch
-CONTAINER_NAME=pytorch_project
+. docker/env.sh
 docker run \
   -dit \
   --gpus all \
