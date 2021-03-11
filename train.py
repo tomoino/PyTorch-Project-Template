@@ -4,7 +4,7 @@
 This module is for training and evaluation.
 
 Args:
-    --configfile (str): 
+    --configfile (str): Config file.
     --eval (bool): For evaluation mode.
 
 """
