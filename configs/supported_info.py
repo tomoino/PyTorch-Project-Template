@@ -26,5 +26,18 @@ SUPPORTED_SAMPLER = [
     "balanced_batch_sampler",
 ]
 
-SUPPORTED_MODEL = {
-}
+SUPPORTED_MODEL = [
+    "resnet18",
+]
+
+SUPPORTED_OPTIMIZER = [
+    "adam",
+]
+
+SUPPORTED_CRITERION = [
+    "cross_entropy",
+]
+
+SUPPORTED_METRIC = [
+    "classification",
+]

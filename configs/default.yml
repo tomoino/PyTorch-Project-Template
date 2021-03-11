@@ -15,28 +15,26 @@ data:
 # Training configs
 train:
   batch_size: 8
-  epochs: 50
+  epochs: 3
   optimizer:
-    type: adam
+    name: adam
     lr: 0.0001
     decay: 0.0001
   criterion:
-    type: cross_entropy
-  n_gpus: 1
-  save_ckpt_interval: 10
+    name: cross_entropy
+  metric:
+    name: classification
+  save_best_ckpt: True
   num_workers: 2
   sampler_name: balanced_batch_sampler
   class_num: 8
+  classes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
   shot_num: 15
+  logdir: ./logs/
 
 # Model configs
 model:
-  name: fcn_resnet50
-  n_classes: 21
+  name: resnet18
   pretrained: False
-  resume: 
-    # e.g) resume: ./logs/2020-07-26T00:19:34.918002/ckpt/best_acc_ckpt.pth if resume. Blank if not resume
-
-# Other configs
-util:
-  logdir: ./logs/
+  initial_ckpt: 
+    # e.g) initial_ckpt: ./logs/2020-07-26T00:19:34.918002/ckpt/best_acc_ckpt.pth if resume. Blank if not resume

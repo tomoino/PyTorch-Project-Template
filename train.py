@@ -10,11 +10,11 @@ Args:
 """
 
 import argparse
-import sys
 
 from utils.load import load_yaml
 from data import get_dataloader
-# from model import get_model
+from models import get_model
+from executor import train, eval
 
 
 def parser() -> object:
@@ -47,25 +47,14 @@ def main(args) -> None:
     """
 
     config: dict = load_yaml(args.configfile)
+    model = get_model(config)
 
-    # model = get_model(config)
-    
     if not args.eval:
         train_dataloader, val_dataloader = get_dataloader(config, mode="trainval")
-        # model.train()
+        train(config, model=model, train_dataloader=train_dataloader, val_dataloader=val_dataloader)
     else:
         test_dataloader = get_dataloader(config, mode="test")
-        # model.evaluate()
-
-    # model.load_data(args.eval)
-    # model.build()
-    
-    # if args.eval:
-    #     model.evaluate()
-    # else:
-    #     model.train()
-
-    sys.exit()
+        eval(config, model=model, eval_dataloader=test_dataloader)
 
 if __name__ == '__main__':
     args = parser()

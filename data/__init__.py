@@ -7,7 +7,7 @@ This is the module for handling data.
 
 from torch.utils.data.sampler import BatchSampler, SequentialSampler
 
-from configs.supported_info import *
+from configs.supported_info import SUPPORTED_DATASET, SUPPORTED_SAMPLER
 import data.helper
 from data.dataloader import DataLoader
 from data.dataset.omniglot import Omniglot

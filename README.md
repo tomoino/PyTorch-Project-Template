@@ -22,3 +22,9 @@ $ sh docker/exec.sh
 [] classmethod, staticmethod
 [] value error
 [] usage as template
+[] pytorch-lightning
+[] multi-gpu
+[] logger
+[] refactoring on cfg to make the modules easy to reuse.
+[] utils.paths
+[] metric: confusion matrix
