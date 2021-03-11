@@ -16,15 +16,15 @@ $ sh docker/exec.sh
 ## Structure
 
 ## TODO
-[] flake8
-[] FP16 (apex)
-[] projects
-[] classmethod, staticmethod
-[] value error
-[] usage as template
-[] pytorch-lightning
-[] multi-gpu
-[] logger
-[] refactoring on cfg to make the modules easy to reuse.
-[] utils.paths
-[] metric: confusion matrix
+- [ ] flake8
+- [ ] FP16 (apex)
+- [ ] projects
+- [ ] classmethod, staticmethod
+- [ ] value error
+- [ ] usage as template
+- [ ] pytorch-lightning
+- [ ] multi-gpu
+- [ ] logger
+- [ ] refactoring on cfg to make the modules easy to reuse.
+- [ ] utils.paths
+- [ ] metric: confusion matrix
