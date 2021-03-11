@@ -16,4 +16,9 @@ $ sh docker/exec.sh
 ## Structure
 
 ## TODO
-[] FP16
+[] flake8
+[] FP16 (apex)
+[] projects
+[] classmethod, staticmethod
+[] value error
+[] usage as template
