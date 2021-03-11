@@ -1,5 +1,5 @@
 #!/bin/sh
-CONTAINER_NAME=pytorch_project
+. docker/env.sh
 docker exec \
   -it \
-  pytorch_project sudo fish
+  $CONTAINER_NAME sudo fish

@@ -1,5 +1,5 @@
 #!/bin/sh
-IMAGE_NAME=my_pytorch
+. docker/env.sh
 docker build \
   --build-arg USER_ID=$(id -u) \
   --build-arg GROUP_ID=$(id -g) \

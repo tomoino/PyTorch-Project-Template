@@ -1,0 +1,40 @@
+### Default configs ###
+# Data configs
+data:
+  dataset_name: omniglot 
+  dataset_root: ./datasets
+  dataroot: 
+    train: ./data/dataset/train
+    val: ./data/dataset/val
+    test: ./data/dataset/test
+  labelroot: 
+    train: ./data/dataset/label/train
+    val: ./data/dataset/label/val
+    test: ./data/dataset/label/test
+
+# Training configs
+train:
+  batch_size: 8
+  epochs: 3
+  optimizer:
+    name: adam
+    lr: 0.0001
+    decay: 0.0001
+  criterion:
+    name: cross_entropy
+  metric:
+    name: classification
+  save_best_ckpt: True
+  num_workers: 2
+  sampler_name: balanced_batch_sampler
+  class_num: 8
+  classes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+  shot_num: 15
+  logdir: ./logs/
+
+# Model configs
+model:
+  name: resnet18
+  pretrained: False
+  initial_ckpt: 
+    # e.g) initial_ckpt: ./logs/2020-07-26T00:19:34.918002/ckpt/best_acc_ckpt.pth if resume. Blank if not resume
