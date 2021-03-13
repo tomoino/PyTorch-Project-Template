@@ -1,4 +1,3 @@
-# もととなるImage 
 FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
 
 ARG USERNAME=duser
@@ -27,18 +26,18 @@ RUN apt-get update && \
     apt-add-repository ppa:deadsnakes/ppa && \
 		apt-get install -y \
 			curl \
-      git \
-      sudo \
-      tree \
-      vim \
-      wget \
-      build-essential \
-      unzip \
-      libopencv-dev \
-      fish \
-      fonts-powerline \
-      python3.9 \
-      python3-pip && \
+			git \
+			sudo \
+			tree \
+			vim \
+			wget \
+			build-essential \
+			unzip \
+			libopencv-dev \
+			fish \
+			fonts-powerline \
+			python3.9 \
+			python3-pip && \
     apt-get clean && \
 		rm -rf /var/lib/apt/lists/* && \
 		rm -rf /var/cache/apk/
@@ -72,5 +71,4 @@ RUN git clone https://github.com/tomoino/dotfiles.git $DOTFILES_PATH && \
     chown -R ${USERNAME}:${USERNAME} $DOTFILES_PATH && \
     sudo sh $DOTFILES_PATH/init_docker.sh
 
-# 各種命令を実行するカレントディレクトリを指定
 WORKDIR /workspace
