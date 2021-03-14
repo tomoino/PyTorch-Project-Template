@@ -51,10 +51,10 @@ RUN pip3 install -U pip && \
 		pip3 install ${PIP_OPTIONS} -U setuptools
 
 # nvidia
-WORKDIR /tmp/apex/
-RUN git clone https://github.com/NVIDIA/apex
-WORKDIR /tmp/apex/apex/
-RUN pip3 install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" .
+# WORKDIR /tmp/apex/
+# RUN git clone https://github.com/NVIDIA/apex
+# WORKDIR /tmp/apex/apex/
+# RUN pip3 install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" .
 
 # duser setting
 ARG USER_ID
