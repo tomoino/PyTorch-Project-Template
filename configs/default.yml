@@ -1,21 +1,13 @@
 ### Default configs ###
 # Data configs
 data:
-  dataset_name: omniglot 
+  dataset_name: cifar10
   dataset_root: ./datasets
-  dataroot: 
-    train: ./data/dataset/train
-    val: ./data/dataset/val
-    test: ./data/dataset/test
-  labelroot: 
-    train: ./data/dataset/label/train
-    val: ./data/dataset/label/val
-    test: ./data/dataset/label/test
 
 # Training configs
 train:
-  batch_size: 8
-  epochs: 3
+  batch_size: 10
+  epochs: 100
   optimizer:
     name: adam
     lr: 0.0001
@@ -27,9 +19,9 @@ train:
   save_best_ckpt: True
   num_workers: 2
   sampler_name: balanced_batch_sampler
-  class_num: 8
-  classes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-  shot_num: 15
+  class_num: 10
+  classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+  shot_num: 20
   logdir: ./logs/
 
 # Model configs

@@ -2,12 +2,12 @@
 ## Installation
 ```
 $ git clone git@github.com:tomoino/PyTorch-Project-Template.git
-$ cd PyTorch-Project-Template
-$ sh docker/build.sh
 ```
 
 ## Usage
 ```
+$ cd PyTorch-Project-Template
+$ sh docker/build.sh
 $ sh docker/run.sh
 $ sh docker/exec.sh
 ```

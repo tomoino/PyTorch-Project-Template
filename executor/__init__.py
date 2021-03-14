@@ -21,7 +21,7 @@ def save_ckpt(cfg: dict, model: object, epoch: int) -> None:
 
     """
 
-    ckpt_path = f"{cfg['train']['logdir']}/ckpt/best_acc_ckpt.pth"
+    ckpt_path = f"{cfg['train']['logdir']}ckpt/best_acc_ckpt.pth"
 
     torch.save({
         'epoch': epoch,
@@ -68,11 +68,12 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
 
     eval_acc = model.metric.acc
     model.metric.reset_states()
+    print(f'acc: {eval_acc}')
 
     return eval_acc
 
 
-def train(config: dict, model: object, train_dataloader: object, val_dataloader: object) -> None:
+def train(cfg: dict, model: object, train_dataloader: object, val_dataloader: object) -> None:
     """Train
 
     Trains model.
@@ -85,8 +86,7 @@ def train(config: dict, model: object, train_dataloader: object, val_dataloader:
 
     """
 
-    epochs = range(config["train"]["epochs"])
-    model.build()
+    epochs = range(cfg["train"]["epochs"])
 
     best_acc = 0.0
 
@@ -99,7 +99,6 @@ def train(config: dict, model: object, train_dataloader: object, val_dataloader:
             for idx, (inputs, targets) in enumerate(pbar):
                 inputs = inputs.to(model.device)
                 targets = targets.to(model.device)
-
                 outputs = model.model(inputs)
 
                 loss = model.criterion(outputs, targets)
@@ -119,12 +118,12 @@ def train(config: dict, model: object, train_dataloader: object, val_dataloader:
         model.metric.result(epoch, mode='train')
         model.metric.reset_states()
 
-        val_acc = eval(cfg, model=model, eval_dataloader=val_dataloader)
+        val_acc = eval(model=model, eval_dataloader=val_dataloader, epoch=epoch)
         model.metric.reset_states()
 
         # save best ckpt
         if val_acc > best_acc:
             best_acc = val_acc
-            model.save_ckpt(cfg, model=model, epoch=epoch)
+            save_ckpt(cfg, model=model, epoch=epoch)
     
 

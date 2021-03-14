@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Omniglot dataset
+"""CIFAR10 dataset
 
 """
 
+import torch
 from torchvision import datasets, transforms
 
-class Omniglot(datasets.Omniglot):
+class CIFAR10(datasets.CIFAR10):
     def __init__(self, cfg: dict, mode: str):
         """Initialization
     
-        Get Omniglot dataset.
+        Get CIFAR10 dataset.
 
         Args:
             cfg: Config.
@@ -19,17 +20,21 @@ class Omniglot(datasets.Omniglot):
 
         """
 
+        _transform = transforms.Compose(
+            [transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
         if mode == "trainval":
             super().__init__(
-                background = True,
-                root = cfg["data"]["dataset_root"],
+                root=cfg["data"]["dataset_root"],
+                train=True,
                 download = True,
-                transform=transforms.ToTensor()
+                transform=_transform
                 )
         elif mode == "test":
             super().__init__(
-                background = False,
                 root = cfg["data"]["dataset_root"],
+                train=False,
                 download = True,
-                transform=transforms.ToTensor()
+                transform=_transform
                 )

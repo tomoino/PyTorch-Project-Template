@@ -26,3 +26,5 @@ class ResNet18(BaseModel):
 
         self.model = models.resnet18(pretrained=pretrained)
         self.model.fc = nn.Linear(in_features = 512, out_features = self.class_num, bias = True)
+
+        self.build()

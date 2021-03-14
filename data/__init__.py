@@ -11,6 +11,8 @@ from configs.supported_info import SUPPORTED_DATASET, SUPPORTED_SAMPLER
 import data.helper
 from data.dataloader import DataLoader
 from data.dataset.omniglot import Omniglot
+from data.dataset.imagenet import ImageNet
+from data.dataset.cifar10 import CIFAR10
 from data.sampler.balanced_batch_sampler import BalancedBatchSampler
 
 def get_dataset(cfg: dict, mode: str) -> tuple:
@@ -46,6 +48,25 @@ def get_dataset(cfg: dict, mode: str) -> tuple:
             return helper.classification_train_val_split(dataset=filtered_dataset, shot_num=cfg["train"]["shot_num"])
         elif mode == "test":
             return filtered_dataset
+            
+    elif dataset_name == "cifar10":
+        _dataset = CIFAR10(cfg, mode)
+        _classes = list(range(cfg["train"]["class_num"]))
+        filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
+
+        if mode == "trainval":
+            return helper.classification_train_val_split(dataset=filtered_dataset, shot_num=cfg["train"]["shot_num"])
+        elif mode == "test":
+            return filtered_dataset
+    # elif dataset_name == "imagenet":
+    #     _dataset = ImageNet(cfg, mode)
+    #     _classes = list(range(cfg["train"]["class_num"]))
+    #     filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
+
+    #     if mode == "trainval":
+    #         return helper.classification_train_val_split(dataset=filtered_dataset, shot_num=cfg["train"]["shot_num"])
+    #     elif mode == "test":
+    #         return filtered_dataset
 
 
 def get_sampler(cfg: dict, mode: str, dataset: object) -> object:

@@ -1,3 +1,3 @@
 #!/bin/sh
-export IMAGE_NAME=my_pytorch
-export CONTAINER_NAME=pytorch_project
+export IMAGE_NAME=${USER}_pytorch_project
+export CONTAINER_NAME=${USER}_pytorch_project
