@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Omniglot dataset
+"""ImageNet dataset
 
 """
 
 from torchvision import datasets, transforms
 
-class Omniglot(datasets.Omniglot):
+class ImageNet(datasets.ImageNet):
     def __init__(self, cfg: dict, mode: str):
         """Initialization
     
-        Get Omniglot dataset.
+        Get ImageNet dataset.
 
         Args:
             cfg: Config.
-            mode: Mode. 
+            mode: Mode of data loader. 
                 trainval: For trainning and validation.
                 test: For test.
 
@@ -21,15 +21,13 @@ class Omniglot(datasets.Omniglot):
 
         if mode == "trainval":
             super().__init__(
-                background = True,
-                root = cfg["data"]["dataset_root"],
-                download = True,
+                root=cfg["data"]["dataset_root"],
+                split="train",
                 transform=transforms.ToTensor()
                 )
         elif mode == "test":
             super().__init__(
-                background = False,
                 root = cfg["data"]["dataset_root"],
-                download = True,
+                split="val",
                 transform=transforms.ToTensor()
                 )

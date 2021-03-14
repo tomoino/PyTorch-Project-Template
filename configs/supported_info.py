@@ -20,6 +20,7 @@ Note:
 
 SUPPORTED_DATASET = [
     "omniglot",
+    # "imagenet",
 ]
 
 SUPPORTED_SAMPLER = [
