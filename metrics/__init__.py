@@ -9,7 +9,7 @@ from configs.supported_info import SUPPORTED_METRIC
 from metrics.classification_metric import ClassificationMetric
 
 
-def get_metric(cfg: dict) -> object:
+def get_metric(cfg: object) -> object:
     """Get metric
 
     This is function to get criterion.
@@ -25,7 +25,7 @@ def get_metric(cfg: dict) -> object:
 
     """
     
-    metric_name = cfg["train"]["metric"]["name"]
+    metric_name = cfg.train.metric.name
 
     if metric_name not in SUPPORTED_METRIC:
         NotImplementedError('The metric is not supported.')

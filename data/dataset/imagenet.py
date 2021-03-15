@@ -6,7 +6,7 @@
 from torchvision import datasets, transforms
 
 class ImageNet(datasets.ImageNet):
-    def __init__(self, cfg: dict, mode: str):
+    def __init__(self, cfg: object, mode: str):
         """Initialization
     
         Get ImageNet dataset.
@@ -21,13 +21,13 @@ class ImageNet(datasets.ImageNet):
 
         if mode == "trainval":
             super().__init__(
-                root=cfg["data"]["dataset_root"],
+                root=cfg.data.dataset.rootdir,
                 split="train",
                 transform=transforms.ToTensor()
                 )
         elif mode == "test":
             super().__init__(
-                root = cfg["data"]["dataset_root"],
+                root = cfg.data.dataset.rootdir,
                 split="val",
                 transform=transforms.ToTensor()
                 )

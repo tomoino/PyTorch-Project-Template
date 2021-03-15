@@ -10,7 +10,7 @@ from models.base_model import BaseModel
 
 
 class ResNet18(BaseModel):
-    def __init__(self, cfg: dict):
+    def __init__(self, cfg: object):
         """Initialization
     
         Build model.
@@ -21,10 +21,10 @@ class ResNet18(BaseModel):
         """
 
         super().__init__(cfg)
-        self.class_num = self.config["train"]["class_num"]
-        pretrained = self.config["model"]["pretrained"]
+        self.num_class = self.cfg.data.dataset.num_class
+        pretrained = self.cfg.model.pretrained
 
-        self.model = models.resnet18(pretrained=pretrained)
-        self.model.fc = nn.Linear(in_features = 512, out_features = self.class_num, bias = True)
+        self.network = models.resnet18(pretrained=pretrained)
+        self.network.fc = nn.Linear(in_features = 512, out_features = self.num_class, bias = True)
 
         self.build()

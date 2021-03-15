@@ -34,14 +34,14 @@ def class_filter(dataset: object, classes: list) -> object:
     return filtered_dataset
 
 
-def classification_train_val_split(dataset: object, shot_num: int) -> tuple:
+def classification_train_val_split(dataset: object, num_shot: int) -> tuple:
     """Train-val splitter for classification
 
     Split dataset to train dataset and validation dataset for classification.
 
     Args:
         dataset: Dataset.
-        shot_num: Number of samples of train data for each class.
+        num_shot: Number of samples of train data for each class.
 
     Returns:
         Tuple of dataset objects.
@@ -49,19 +49,19 @@ def classification_train_val_split(dataset: object, shot_num: int) -> tuple:
     """
 
     dataset_len = len(dataset)
-    train_num_dict = {}
+    num_samples_per_class = {}
     train_indices = []
     val_indices = []
 
     for idx in range(dataset_len):
         class_label = dataset[idx][1]
-        if class_label not in train_num_dict:
-            train_num_dict[class_label] = 1
+        if class_label not in num_samples_per_class:
+            num_samples_per_class[class_label] = 1
             train_indices.append(idx)
             
-        elif train_num_dict[class_label] < shot_num:
+        elif num_samples_per_class[class_label] < num_shot:
             train_indices.append(idx)
-            train_num_dict[class_label] += 1
+            num_samples_per_class[class_label] += 1
 
         else:
             val_indices.append(idx)

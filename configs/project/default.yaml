@@ -1,13 +1,22 @@
-### Default configs ###
+# @package _group_
+#
+# Default project 
+
 # Data configs
 data:
-  dataset_name: cifar10
-  dataset_root: ./datasets
+  dataset: 
+    name: cifar10
+    rootdir: /workspace/datasets
+    classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    num_class: 10
+    num_shot: 20
+  sampler:
+    name: balanced_batch_sampler
 
 # Training configs
 train:
   batch_size: 10
-  epochs: 100
+  epochs: 3
   optimizer:
     name: adam
     lr: 0.0001
@@ -18,11 +27,6 @@ train:
     name: classification
   save_best_ckpt: True
   num_workers: 2
-  sampler_name: balanced_batch_sampler
-  class_num: 10
-  classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-  shot_num: 20
-  logdir: ./logs/
 
 # Model configs
 model:

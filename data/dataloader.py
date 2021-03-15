@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DataLoader class
-
-
-
-"""
+"""DataLoader class"""
 
 import torch
 
@@ -15,7 +11,7 @@ class DataLoader(torch.utils.data.DataLoader):
 
     """
 
-    def __init__(self, cfg: dict, dataset: object, sampler: object):
+    def __init__(self, cfg: object, dataset: object, sampler: object):
         """Initialization
     
         Get data loader.
@@ -29,7 +25,7 @@ class DataLoader(torch.utils.data.DataLoader):
 
         super().__init__(
             dataset=dataset,
-            num_workers=cfg["train"]["num_workers"],
+            num_workers=cfg.train.num_workers,
             pin_memory=True,
             batch_sampler=sampler,
             )

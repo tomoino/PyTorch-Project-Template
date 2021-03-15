@@ -2,7 +2,6 @@ torch==1.7.1
 torchelastic==0.2.0
 torchtext==0.8.0
 torchvision==0.8.2
+hydra-core==1.0.6
 mlflow
 flake8
-sklearn
-transformers
