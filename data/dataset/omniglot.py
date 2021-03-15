@@ -6,7 +6,7 @@
 from torchvision import datasets, transforms
 
 class Omniglot(datasets.Omniglot):
-    def __init__(self, cfg: dict, mode: str):
+    def __init__(self, cfg: object, mode: str):
         """Initialization
     
         Get Omniglot dataset.
@@ -22,14 +22,14 @@ class Omniglot(datasets.Omniglot):
         if mode == "trainval":
             super().__init__(
                 background = True,
-                root = cfg["data"]["dataset_root"],
+                root = cfg.data.dataset.rootdir,
                 download = True,
                 transform=transforms.ToTensor()
                 )
         elif mode == "test":
             super().__init__(
                 background = False,
-                root = cfg["data"]["dataset_root"],
+                root = cfg.data.dataset.rootdir,
                 download = True,
                 transform=transforms.ToTensor()
                 )

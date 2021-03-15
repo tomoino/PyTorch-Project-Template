@@ -15,14 +15,22 @@ import torch
 
 
 class ClassificationMetric:
-    def __init__(self, cfg: dict):
-        self.class_num = cfg["train"]["class_num"]
-        self.classes = cfg["train"]["classes"]
-        self.metric_dir = Path(f"{cfg['train']['logdir']}/metric")
+    def __init__(self, cfg: object):
+        """Initialization
+
+        Args:
+            cfg: Config.
+
+        """
+
+        self.num_class = cfg.data.dataset.num_class
+        self.classes = cfg.data.dataset.classes
+        self.metric_dir = Path(f"./metric")
         self.eps = 1e-9
 
         self.loss_list = []
-        self.cmx = torch.zeros(self.class_num, self.class_num, dtype=torch.int64)
+        self.cmx = torch.zeros(self.num_class, self.num_class, dtype=torch.int64)
+
 
     def update(self, preds, targets, loss) -> None:
         stacked = torch.stack((targets, preds), dim=1)
@@ -31,6 +39,7 @@ class ClassificationMetric:
             self.cmx[tl, pl] = self.cmx[tl, pl] + 1
 
         self.loss_list.append(loss)
+
         
     def result(self, epoch: int, mode: str):
         """Metric(acc, loss, precision, recall, f1score), Logging, Save and Plot CMX
@@ -42,6 +51,7 @@ class ClassificationMetric:
                 eval: For validation or test.
             
         """
+
         tp = torch.diag(self.cmx).to(torch.float32)
         fp = (self.cmx.sum(axis=1) - torch.diag(self.cmx)).to(torch.float32)
         fn = (self.cmx.sum(axis=0) - torch.diag(self.cmx)).to(torch.float32)
@@ -55,4 +65,4 @@ class ClassificationMetric:
 
     def reset_states(self):
         self.loss_list = []
-        self.cmx = torch.zeros(self.class_num, self.class_num, dtype=torch.int64)
+        self.cmx = torch.zeros(self.num_class, self.num_class, dtype=torch.int64)

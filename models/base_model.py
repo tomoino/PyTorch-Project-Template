@@ -16,9 +16,9 @@ from metrics import get_metric
 
 class BaseModel(ABC):
 
-    def __init__(self, cfg: dict):
-        self.config = cfg
-        self.model = None
+    def __init__(self, cfg: object):
+        self.cfg = cfg
+        self.network = None
         self.device = None
         self.optimizer = None
         self.criterion = None
@@ -46,16 +46,19 @@ class BaseModel(ABC):
 
         """
 
-        if not self.config["model"]["initial_ckpt"]:
+        initial_ckpt = self.cfg.model.initial_ckpt
+
+        if not initial_ckpt:
             return
 
-        ckpt_path = Path(self.config["model"]["initial_ckpt"])
+        ckpt_path = Path(initial_ckpt)
         
         if not ckpt_path.exists():
             raise ValueError(' The checkpoint is not found.')
 
         ckpt = torch.load(resume)
-        self.model.load_state_dict(ckpt['model_state_dict'])
+        self.network.load_state_dict(ckpt['model_state_dict'])
+
 
     def setup_device(self) -> None:
         """Setup device """
@@ -65,16 +68,19 @@ class BaseModel(ABC):
         else:
             self.device = torch.device('cpu')
 
-        self.model = self.model.to(self.device)
+        self.network = self.network.to(self.device)
+
 
     def set_optimizer(self) -> None:
         """Set optimizer """
-        self.optimizer = get_optimizer(self.config, self.model)
+        self.optimizer = get_optimizer(self.cfg.train.optimizer, self.network)
+
 
     def set_criterion(self) -> None:
         """Set criterion """
-        self.criterion = get_criterion(self.config)
+        self.criterion = get_criterion(self.cfg.train.criterion)
+
 
     def set_metric(self) -> None:
         """Set metric """
-        self.metric = get_metric(self.config)
+        self.metric = get_metric(self.cfg)

@@ -7,7 +7,7 @@ import torch
 from torchvision import datasets, transforms
 
 class CIFAR10(datasets.CIFAR10):
-    def __init__(self, cfg: dict, mode: str):
+    def __init__(self, cfg: object, mode: str):
         """Initialization
     
         Get CIFAR10 dataset.
@@ -26,14 +26,14 @@ class CIFAR10(datasets.CIFAR10):
 
         if mode == "trainval":
             super().__init__(
-                root=cfg["data"]["dataset_root"],
+                root=cfg.data.dataset.rootdir,
                 train=True,
                 download = True,
                 transform=_transform
                 )
         elif mode == "test":
             super().__init__(
-                root = cfg["data"]["dataset_root"],
+                root = cfg.data.dataset.rootdir,
                 train=False,
                 download = True,
                 transform=_transform

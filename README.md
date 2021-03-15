@@ -1,19 +1,40 @@
 # PyTorch-Project-Template
 ## Installation
-```
-$ git clone git@github.com:tomoino/PyTorch-Project-Template.git
+```bash
+git clone git@github.com:tomoino/PyTorch-Project-Template.git
 ```
 
 ## Usage
-```
-$ cd PyTorch-Project-Template
-$ sh docker/build.sh
-$ sh docker/run.sh
-$ sh docker/exec.sh
+### Setup
+```bash
+cd PyTorch-Project-Template
+sh docker/build.sh
+sh docker/run.sh
+sh docker/exec.sh
 ```
 
-## Structure
+### Training
+```bash
+python train.py
 ```
+
+### Evaluation
+```bash
+python train.py eval=True
+```
+
+### Start a new project
+1. Add yaml file to "./configs/project"
+    ```bash
+    vi ./configs/project/new_project.yaml
+    ```
+1. Run train.py with project option
+    ```bash
+    python train.py project=new_project
+    ```
+
+## Structure
+```bash
 .
 ├── README.md
 ├── configs

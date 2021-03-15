@@ -9,13 +9,13 @@ from configs.supported_info import SUPPORTED_MODEL
 from models.resnet18 import ResNet18
 
 
-def get_model(cfg: dict) -> object:
+def get_model(cfg: object) -> object:
     """Get model function
 
     This is function to get model.
 
     Args:
-        cfg: Config.
+        cfg: Config of the project.
 
     Returns:
         Model object.
@@ -25,7 +25,7 @@ def get_model(cfg: dict) -> object:
 
     """
 
-    model_name = cfg["model"]["name"]
+    model_name = cfg.model.name
 
     if model_name not in SUPPORTED_MODEL:
         NotImplementedError('The model is not supported.')

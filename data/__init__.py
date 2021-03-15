@@ -15,7 +15,8 @@ from data.dataset.imagenet import ImageNet
 from data.dataset.cifar10 import CIFAR10
 from data.sampler.balanced_batch_sampler import BalancedBatchSampler
 
-def get_dataset(cfg: dict, mode: str) -> tuple:
+
+def get_dataset(cfg: object, mode: str) -> tuple:
     """Get dataset function
 
     This is function to get dataset.
@@ -34,33 +35,33 @@ def get_dataset(cfg: dict, mode: str) -> tuple:
 
     """
 
-    dataset_name = cfg["data"]["dataset_name"]
+    dataset_name = cfg.data.dataset.name
 
     if dataset_name not in SUPPORTED_DATASET:
         NotImplementedError('The dataset is not supported.')
 
     if dataset_name == "omniglot":
         _dataset = Omniglot(cfg, mode)
-        _classes = list(range(cfg["train"]["class_num"]))
+        _classes = list(range(cfg.data.dataset.num_class))
         filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
 
         if mode == "trainval":
-            return helper.classification_train_val_split(dataset=filtered_dataset, shot_num=cfg["train"]["shot_num"])
+            return helper.classification_train_val_split(dataset=filtered_dataset, num_shot=cfg.data.dataset.num_shot)
         elif mode == "test":
             return filtered_dataset
             
     elif dataset_name == "cifar10":
         _dataset = CIFAR10(cfg, mode)
-        _classes = list(range(cfg["train"]["class_num"]))
+        _classes = list(range(cfg.data.dataset.num_class))
         filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
 
         if mode == "trainval":
-            return helper.classification_train_val_split(dataset=filtered_dataset, shot_num=cfg["train"]["shot_num"])
+            return helper.classification_train_val_split(dataset=filtered_dataset, num_shot=cfg.data.dataset.num_shot)
         elif mode == "test":
             return filtered_dataset
     # elif dataset_name == "imagenet":
     #     _dataset = ImageNet(cfg, mode)
-    #     _classes = list(range(cfg["train"]["class_num"]))
+    #     _classes = list(range(cfg.data.dataset.num_class))
     #     filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
 
     #     if mode == "trainval":
@@ -69,14 +70,14 @@ def get_dataset(cfg: dict, mode: str) -> tuple:
     #         return filtered_dataset
 
 
-def get_sampler(cfg: dict, mode: str, dataset: object) -> object:
+def get_sampler(cfg: object, mode: str, dataset: object) -> object:
     """Get sampler function
 
     This is function to get samplers.
 
     Args:
         cfg: Config.
-        mode: Mode of sampler. 
+        mode: Mode. 
             train: For trainning.
             val: For validation.
             test: For test.
@@ -90,7 +91,7 @@ def get_sampler(cfg: dict, mode: str, dataset: object) -> object:
 
     """
 
-    sampler_name = cfg["train"]["sampler_name"]
+    sampler_name = cfg.data.sampler.name
 
     if sampler_name not in SUPPORTED_SAMPLER:
         NotImplementedError('The sampler is not supported.')
@@ -100,10 +101,10 @@ def get_sampler(cfg: dict, mode: str, dataset: object) -> object:
             return BalancedBatchSampler(cfg, dataset=dataset)
 
         elif mode == "val" or mode == "test":
-            return BatchSampler(SequentialSampler(dataset), batch_size=cfg["train"]["batch_size"], drop_last=False)
+            return BatchSampler(SequentialSampler(dataset), batch_size=cfg.train.batch_size, drop_last=False)
 
 
-def get_dataloader(cfg: dict, mode: str) -> tuple:
+def get_dataloader(cfg: object, mode: str) -> tuple:
     """Get dataloader function
 
     This is function to get dataloaders.
@@ -111,7 +112,7 @@ def get_dataloader(cfg: dict, mode: str) -> tuple:
 
     Args:
         cfg: Config.
-        mode: Mode of dataloader. 
+        mode: Mode. 
             trainval: For trainning and validation.
             test: For test.
 

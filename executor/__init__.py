@@ -9,24 +9,23 @@ import torch
 from tqdm import tqdm
 
 
-def save_ckpt(cfg: dict, model: object, epoch: int) -> None:
+def save_ckpt(model: object, epoch: int) -> None:
     """Save checkpoint
 
     Saves checkpoint.
 
     Args:
         model: Model.
-        dataloader: Dataloader.
         epoch: Number of epoch.
 
     """
 
-    ckpt_path = f"{cfg['train']['logdir']}ckpt/best_acc_ckpt.pth"
+    ckpt_path = "./best_acc_ckpt.pth"
 
     torch.save({
         'epoch': epoch,
-        'model': model.model,
-        'model_state_dict': model.model.state_dict(),
+        'model': model.network,
+        'model_state_dict': model.network.state_dict(),
         'optimizer_state_dict': model.optimizer.state_dict(),
     }, ckpt_path)
 
@@ -43,7 +42,7 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
 
     """
 
-    model.model.eval()
+    model.network.eval()
     print('\n Evaluation:')
 
     with torch.no_grad():
@@ -52,7 +51,7 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
                 inputs = inputs.to(model.device)
                 targets = targets.to(model.device)
 
-                outputs = model.model(inputs)
+                outputs = model.network(inputs)
 
                 loss = model.criterion(outputs, targets)
                 model.optimizer.zero_grad()
@@ -73,33 +72,32 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
     return eval_acc
 
 
-def train(cfg: dict, model: object, train_dataloader: object, val_dataloader: object) -> None:
+def train(model: object, train_dataloader: object, val_dataloader: object) -> None:
     """Train
 
     Trains model.
 
     Args:
-        config: Config.
         model: Model.
         train_dataloader: Dataloader for training.
         val_dataloader: Dataloader for validation.
 
     """
 
-    epochs = range(cfg["train"]["epochs"])
+    epochs = range(model.cfg.train.epochs)
 
     best_acc = 0.0
 
     for epoch in epochs:
         print(f'\n==================== Epoch: {epoch} ====================')
         print('\n Train:')
-        model.model.train()
+        model.network.train()
 
         with tqdm(train_dataloader, ncols=100) as pbar:
             for idx, (inputs, targets) in enumerate(pbar):
                 inputs = inputs.to(model.device)
                 targets = targets.to(model.device)
-                outputs = model.model(inputs)
+                outputs = model.network(inputs)
 
                 loss = model.criterion(outputs, targets)
 
@@ -124,6 +122,6 @@ def train(cfg: dict, model: object, train_dataloader: object, val_dataloader: ob
         # save best ckpt
         if val_acc > best_acc:
             best_acc = val_acc
-            save_ckpt(cfg, model=model, epoch=epoch)
+            save_ckpt(model=model, epoch=epoch)
     
 
