@@ -5,8 +5,9 @@ These functions are for execution.
 
 """
 
-import torch
 from tqdm import tqdm
+import torch
+import mlflow
 
 
 def save_ckpt(model: object, epoch: int) -> None:
@@ -88,40 +89,47 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
 
     best_acc = 0.0
 
-    for epoch in epochs:
-        print(f'\n==================== Epoch: {epoch} ====================')
-        print('\n Train:')
-        model.network.train()
+    mlflow.set_tracking_uri(f"file:///workspace/mlruns")
+    mlflow.set_experiment(model.cfg.experiment.name)
 
-        with tqdm(train_dataloader, ncols=100) as pbar:
-            for idx, (inputs, targets) in enumerate(pbar):
-                inputs = inputs.to(model.device)
-                targets = targets.to(model.device)
-                outputs = model.network(inputs)
+    with mlflow.start_run():
+        for epoch in epochs:
+            print(f'\n==================== Epoch: {epoch} ====================')
+            print('\n Train:')
+            model.network.train()
 
-                loss = model.criterion(outputs, targets)
+            with tqdm(train_dataloader, ncols=100) as pbar:
+                for idx, (inputs, targets) in enumerate(pbar):
+                    inputs = inputs.to(model.device)
+                    targets = targets.to(model.device)
+                    outputs = model.network(inputs)
 
-                loss.backward()
+                    loss = model.criterion(outputs, targets)
 
-                model.optimizer.step()
-                model.optimizer.zero_grad()
+                    loss.backward()
 
-                preds = outputs.argmax(axis=1)
-                model.metric.update(preds=preds.cpu().detach().clone(),
-                                    targets=targets.cpu().detach().clone(),
-                                    loss=loss.item())
+                    model.optimizer.step()
+                    model.optimizer.zero_grad()
 
-                pbar.set_description(f'train epoch:{epoch}')
+                    preds = outputs.argmax(axis=1)
+                    model.metric.update(preds=preds.cpu().detach().clone(),
+                                        targets=targets.cpu().detach().clone(),
+                                        loss=loss.item())
 
-        model.metric.result(epoch, mode='train')
-        model.metric.reset_states()
+                    pbar.set_description(f'train epoch:{epoch}')
 
-        val_acc = eval(model=model, eval_dataloader=val_dataloader, epoch=epoch)
-        model.metric.reset_states()
+                    steps = epoch * len(train_dataloader) + idx
+                    mlflow.log_metric("loss", loss.item(), step=steps)
 
-        # save best ckpt
-        if val_acc > best_acc:
-            best_acc = val_acc
-            save_ckpt(model=model, epoch=epoch)
+            model.metric.result(epoch, mode='train')
+            model.metric.reset_states()
+
+            val_acc = eval(model=model, eval_dataloader=val_dataloader, epoch=epoch)
+            model.metric.reset_states()
+
+            # save best ckpt
+            if val_acc > best_acc:
+                best_acc = val_acc
+                save_ckpt(model=model, epoch=epoch)
     
 
