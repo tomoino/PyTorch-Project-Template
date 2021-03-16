@@ -84,7 +84,9 @@ If necessary, you can edit env.sh to change the port.
     └── load.py
 ```
 ## TODO
-- [ ] nohup & logger
+- [ ] logger
+- [ ] error handling
+- [ ] nohup
 - [ ] optuna
 - [ ] flake8
 - [ ] FP16 (apex)
@@ -95,8 +97,8 @@ If necessary, you can edit env.sh to change the port.
 - [ ] multi-gpu
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
-- [ ] metric: confusion matrix
 - [ ] docker-compose
+- [x] metrics
 - [x] mlflow
 - [x] hydra tab completion
 - [x] projects
