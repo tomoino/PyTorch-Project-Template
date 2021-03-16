@@ -84,11 +84,14 @@ If necessary, you can edit env.sh to change the port.
     └── load.py
 ```
 ## TODO
-- [ ] logger
 - [ ] error handling
+- [ ] evaluation mode
+- [ ] clear cache command
 - [ ] nohup
 - [ ] optuna
+- [ ] basic metrics
 - [ ] flake8
+- [ ] notification
 - [ ] FP16 (apex)
 - [ ] classmethod, staticmethod
 - [ ] value error
@@ -98,6 +101,7 @@ If necessary, you can edit env.sh to change the port.
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
 - [ ] docker-compose
+- [x] logger
 - [x] metrics
 - [x] mlflow
 - [x] hydra tab completion

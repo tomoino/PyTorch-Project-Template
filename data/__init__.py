@@ -5,6 +5,8 @@ This is the module for handling data.
 
 """
 
+import logging
+
 from torch.utils.data.sampler import BatchSampler, SequentialSampler
 
 from configs.supported_info import SUPPORTED_DATASET, SUPPORTED_SAMPLER
@@ -14,6 +16,9 @@ from data.dataset.omniglot import Omniglot
 from data.dataset.imagenet import ImageNet
 from data.dataset.cifar10 import CIFAR10
 from data.sampler.balanced_batch_sampler import BalancedBatchSampler
+
+
+log = logging.getLogger(__name__)
 
 
 def get_dataset(cfg: object, mode: str) -> tuple:
@@ -121,12 +126,16 @@ def get_dataloader(cfg: object, mode: str) -> tuple:
 
     """
 
+    log.info(f"Loading {cfg.data.dataset.name} dataset...")
+
     if mode == "trainval":
         train_dataset, val_dataset = get_dataset(cfg, mode="trainval")
         train_sampler = get_sampler(cfg, mode="train", dataset=train_dataset)
         val_sampler = get_sampler(cfg, mode="val", dataset=val_dataset)
         train_dataloader = DataLoader(cfg, dataset=train_dataset, sampler=train_sampler)
         val_dataloader = DataLoader(cfg, dataset=val_dataset, sampler=val_sampler)
+
+        log.info(f"Successfully loaded {cfg.data.dataset.name} dataset.")
 
         return train_dataloader, val_dataloader
 
@@ -135,4 +144,6 @@ def get_dataloader(cfg: object, mode: str) -> tuple:
         test_sampler = get_sampler(cfg, mode="test", dataset=test_dataset)
         test_dataloader = DataLoader(cfg, dataset=test_dataset, sampler=test_sampler)
 
+        log.info(f"Successfully loaded {cfg.data.dataset.name} dataset.")
+        
         return test_dataloader

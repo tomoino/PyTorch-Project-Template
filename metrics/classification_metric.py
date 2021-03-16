@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 """Classification metric"""
 
+import logging
 from statistics import mean
 
 import torch
 import mlflow
+
+
+log = logging.getLogger(__name__)
 
 
 class ClassificationMetric:
@@ -87,24 +91,19 @@ class ClassificationMetric:
             metrics = {
                 "accuracy": acc,
                 "loss": loss,
-                "precision": precision,
-                "recall": recall,
-                "f1score": f1score
             }
-            mlflow.log_metric("accuracy", acc, step = epoch)
-            mlflow.log_metric("loss", loss, step = epoch)
+            log.info(f"accuracy: {acc}")
+            log.info(f"loss: {loss}")
 
         elif mode == "eval":
             metrics = {
                 "val_accuracy": acc,
                 "val_loss": loss,
-                "val_precision": precision,
-                "val_recall": recall,
-                "val_f1score": f1score
             }
-            mlflow.log_metric("val_accuracy", acc, step = epoch)
-            mlflow.log_metric("val_loss", loss, step = epoch)
+            log.info(f"val_accuracy: {acc}")
+            log.info(f"val_loss: {loss}")
 
+        mlflow.log_metrics(metrics, step = epoch)
         self.model_score = acc
         
 

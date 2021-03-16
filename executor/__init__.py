@@ -52,7 +52,7 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
     """
 
     model.network.eval()
-    log.info('\n Evaluation:')
+    log.info('Evaluation:')
 
     with torch.no_grad():
         with tqdm(eval_dataloader, ncols=100) as pbar:
@@ -91,6 +91,8 @@ def log_param(cfg: object) -> None:
         "model": cfg.model.name,
         "batch_size": cfg.train.batch_size,
         "epochs": cfg.train.epochs,
+        "criterion": cfg.train.criterion.name,
+        "optimizer": cfg.train.optimizer.name,
         "lr": cfg.train.optimizer.lr
     }
 
@@ -109,6 +111,8 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
 
     """
 
+    log.info("Training process has begun.")
+
     epochs = range(model.cfg.train.epochs)
 
     best_score = 0.0
@@ -119,8 +123,8 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
     with mlflow.start_run():
         log_param(model.cfg)
         for epoch in epochs:
-            log.info(f'\n==================== Epoch: {epoch} ====================')
-            log.info('\n Train:')
+            log.info(f"==================== Epoch: {epoch} ====================")
+            log.info(f"Train:")
             model.network.train()
 
             with tqdm(train_dataloader, ncols=100) as pbar:
@@ -152,6 +156,10 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
             if model_score > best_score:
                 best_score = model_score
                 save_ckpt(model=model, epoch=epoch)
+                log.info("Saved the check point.")
+
+        log.info("Successfully trained the model.")
 
         mlflow.log_artifact("train.log")
         mlflow.log_artifact(".hydra/config.yaml")
+        mlflow.log_artifact("best_acc_ckpt.pth")
