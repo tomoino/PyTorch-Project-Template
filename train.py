@@ -31,7 +31,6 @@ def main(cfg: DictConfig) -> None:
 
     """
 
-
     model = get_model(cfg.project)
 
     if not cfg.eval:

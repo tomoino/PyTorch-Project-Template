@@ -13,16 +13,6 @@ sh docker/run.sh
 sh docker/exec.sh
 ```
 
-### Training
-```bash
-python train.py
-```
-
-### Evaluation
-```bash
-python train.py eval=True
-```
-
 ### Start a new project
 1. Add yaml file to "./configs/project"
     ```bash
@@ -32,6 +22,27 @@ python train.py eval=True
     ```bash
     python train.py project=new_project
     ```
+
+### Training
+```bash
+python train.py
+```
+#### Grid Search
+You can run train.py with multiple different configurations.
+```bash
+python train.py -m \
+    project.train.batch_size=16,32 \
+    project.train.optimizer.lr=0.01,0.001
+```
+#### Evaluation
+```bash
+python train.py eval=True
+```
+
+### Check the results
+You can use MLflow to check the results of your experiment.
+Access http://localhost:8888/ from your browser.
+If necessary, you can edit env.sh to change the port.
 
 ## Structure
 ```bash
@@ -73,9 +84,14 @@ python train.py eval=True
     └── load.py
 ```
 ## TODO
-- [ ] logger (mlflow)
+- [ ] error handling
+- [ ] evaluation mode
+- [ ] clear cache command
+- [ ] nohup
 - [ ] optuna
+- [ ] basic metrics
 - [ ] flake8
+- [ ] notification
 - [ ] FP16 (apex)
 - [ ] classmethod, staticmethod
 - [ ] value error
@@ -84,6 +100,10 @@ python train.py eval=True
 - [ ] multi-gpu
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
-- [ ] metric: confusion matrix
+- [ ] docker-compose
+- [x] logger
+- [x] metrics
+- [x] mlflow
+- [x] hydra tab completion
 - [x] projects
 - [x] hydra

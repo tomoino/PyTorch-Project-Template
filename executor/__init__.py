@@ -5,8 +5,14 @@ These functions are for execution.
 
 """
 
-import torch
+import logging
+
 from tqdm import tqdm
+import torch
+import mlflow
+
+
+log = logging.getLogger(__name__)
 
 
 def save_ckpt(model: object, epoch: int) -> None:
@@ -40,10 +46,13 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
         eval_dataloader: Dataloader.
         epoch: Number of epoch.
 
+    Returns:
+        model_score: Indicator of the excellence of model. The higher the value, the better.
+
     """
 
     model.network.eval()
-    print('\n Evaluation:')
+    log.info('Evaluation:')
 
     with torch.no_grad():
         with tqdm(eval_dataloader, ncols=100) as pbar:
@@ -63,13 +72,31 @@ def eval(model: object, eval_dataloader: object, epoch: int = 0) -> float:
 
                 pbar.set_description(f'eval epoch: {epoch}')
     
-    model.metric.result(epoch, mode='eval')
-
-    eval_acc = model.metric.acc
+    model.metric.calc(epoch, mode='eval')
     model.metric.reset_states()
-    print(f'acc: {eval_acc}')
 
-    return eval_acc
+    return model.metric.model_score
+
+
+def log_param(cfg: object) -> None:
+    """Log parameters
+
+    Args:
+        cfg: Config.
+
+    """
+
+    params = {
+        "dataset": cfg.data.dataset.name,
+        "model": cfg.model.name,
+        "batch_size": cfg.train.batch_size,
+        "epochs": cfg.train.epochs,
+        "criterion": cfg.train.criterion.name,
+        "optimizer": cfg.train.optimizer.name,
+        "lr": cfg.train.optimizer.lr
+    }
+
+    mlflow.log_params(params)
 
 
 def train(model: object, train_dataloader: object, val_dataloader: object) -> None:
@@ -84,44 +111,55 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
 
     """
 
+    log.info("Training process has begun.")
+
     epochs = range(model.cfg.train.epochs)
 
-    best_acc = 0.0
+    best_score = 0.0
 
-    for epoch in epochs:
-        print(f'\n==================== Epoch: {epoch} ====================')
-        print('\n Train:')
-        model.network.train()
+    mlflow.set_tracking_uri("file:///workspace/mlruns")
+    mlflow.set_experiment(model.cfg.experiment.name)
 
-        with tqdm(train_dataloader, ncols=100) as pbar:
-            for idx, (inputs, targets) in enumerate(pbar):
-                inputs = inputs.to(model.device)
-                targets = targets.to(model.device)
-                outputs = model.network(inputs)
+    with mlflow.start_run():
+        log_param(model.cfg)
+        for epoch in epochs:
+            log.info(f"==================== Epoch: {epoch} ====================")
+            log.info(f"Train:")
+            model.network.train()
 
-                loss = model.criterion(outputs, targets)
+            with tqdm(train_dataloader, ncols=100) as pbar:
+                for idx, (inputs, targets) in enumerate(pbar):
+                    inputs = inputs.to(model.device)
+                    targets = targets.to(model.device)
+                    outputs = model.network(inputs)
 
-                loss.backward()
+                    loss = model.criterion(outputs, targets)
 
-                model.optimizer.step()
-                model.optimizer.zero_grad()
+                    loss.backward()
 
-                preds = outputs.argmax(axis=1)
-                model.metric.update(preds=preds.cpu().detach().clone(),
-                                    targets=targets.cpu().detach().clone(),
-                                    loss=loss.item())
+                    model.optimizer.step()
+                    model.optimizer.zero_grad()
 
-                pbar.set_description(f'train epoch:{epoch}')
+                    preds = outputs.argmax(axis=1)
+                    model.metric.update(preds=preds.cpu().detach().clone(),
+                                        targets=targets.cpu().detach().clone(),
+                                        loss=loss.item())
 
-        model.metric.result(epoch, mode='train')
-        model.metric.reset_states()
+                    pbar.set_description(f'train epoch:{epoch}')
 
-        val_acc = eval(model=model, eval_dataloader=val_dataloader, epoch=epoch)
-        model.metric.reset_states()
+            model.metric.calc(epoch, mode='train')
+            model.metric.reset_states()
 
-        # save best ckpt
-        if val_acc > best_acc:
-            best_acc = val_acc
-            save_ckpt(model=model, epoch=epoch)
-    
+            model_score = eval(model=model, eval_dataloader=val_dataloader, epoch=epoch)
+            model.metric.reset_states()
 
+            if model_score > best_score:
+                best_score = model_score
+                save_ckpt(model=model, epoch=epoch)
+                log.info("Saved the check point.")
+
+        log.info("Successfully trained the model.")
+
+        mlflow.log_artifact("train.log")
+        mlflow.log_artifact(".hydra/config.yaml")
+        mlflow.log_artifact("best_acc_ckpt.pth")

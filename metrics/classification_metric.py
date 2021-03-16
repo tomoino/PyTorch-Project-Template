@@ -1,21 +1,36 @@
 # -*- coding: utf-8 -*-
-"""Classification metric
+"""Classification metric"""
 
-This modulel is metric for classification.
-
-"""
-
-import csv
-from pathlib import Path
+import logging
 from statistics import mean
 
-import numpy as np
-import pandas as pd
 import torch
+import mlflow
+
+
+log = logging.getLogger(__name__)
 
 
 class ClassificationMetric:
-    def __init__(self, cfg: object):
+    """Classification metric
+
+    This modulel is metric for classification.
+
+    Attributes:
+        num_class: Number of classes.
+        classes: List of class labels.
+        eps: For calculation of precision, recall and f1score.
+        loss_list: List of losses during 1 epoch.
+        cmx: Confusion matrix during 1 epoch.
+        model_score: Indicator of the excellence of model. The higher the value, the better.
+
+    Note:
+        At the beginning of every epoch, loss_list and cmx must be empty.
+
+
+    """
+
+    def __init__(self, cfg: object) -> None:
         """Initialization
 
         Args:
@@ -25,7 +40,6 @@ class ClassificationMetric:
 
         self.num_class = cfg.data.dataset.num_class
         self.classes = cfg.data.dataset.classes
-        self.metric_dir = Path(f"./metric")
         self.eps = 1e-9
 
         self.loss_list = []
@@ -33,6 +47,14 @@ class ClassificationMetric:
 
 
     def update(self, preds, targets, loss) -> None:
+        """Update loss and cmx
+
+        Args:
+            preds: Predictions.
+            targets: Target values.
+            loss: Loss.
+
+        """
         stacked = torch.stack((targets, preds), dim=1)
         for p in stacked:
             tl, pl = p.tolist()
@@ -41,11 +63,13 @@ class ClassificationMetric:
         self.loss_list.append(loss)
 
         
-    def result(self, epoch: int, mode: str):
-        """Metric(acc, loss, precision, recall, f1score), Logging, Save and Plot CMX
+    def calc(self, epoch: int, mode: str):
+        """Calculate metrics
+        
+        Calculates accuracy, loss, precision, recall and f1score.
         
         Args:
-            epoch: Current epoch
+            epoch: Current epoch.
             mode: Mode. 
                 train: For trainning.
                 eval: For validation or test.
@@ -56,13 +80,39 @@ class ClassificationMetric:
         fp = (self.cmx.sum(axis=1) - torch.diag(self.cmx)).to(torch.float32)
         fn = (self.cmx.sum(axis=0) - torch.diag(self.cmx)).to(torch.float32)
 
-        self.acc = (100.0 * torch.sum(tp) / torch.sum(self.cmx)).item()
-        self.loss = mean(self.loss_list)
+        acc = (100.0 * torch.sum(tp) / torch.sum(self.cmx)).item()
+        loss = mean(self.loss_list)
 
-        self.precision = tp / (tp + fp + self.eps)
-        self.recall = tp / (tp + fn + self.eps)
-        self.f1score = tp / (tp + 0.5 * (fp + fn) + self.eps) # micro f1score
+        precision = tp / (tp + fp + self.eps)
+        recall = tp / (tp + fn + self.eps)
+        f1score = tp / (tp + 0.5 * (fp + fn) + self.eps)
 
-    def reset_states(self):
+        if mode == "train":
+            metrics = {
+                "accuracy": acc,
+                "loss": loss,
+            }
+            log.info(f"accuracy: {acc}")
+            log.info(f"loss: {loss}")
+
+        elif mode == "eval":
+            metrics = {
+                "val_accuracy": acc,
+                "val_loss": loss,
+            }
+            log.info(f"val_accuracy: {acc}")
+            log.info(f"val_loss: {loss}")
+
+        mlflow.log_metrics(metrics, step = epoch)
+        self.model_score = acc
+        
+
+    def reset_states(self) -> None:
+        """Reset states
+
+        Resets loss_list and cmx
+
+        """
+
         self.loss_list = []
         self.cmx = torch.zeros(self.num_class, self.num_class, dtype=torch.int64)

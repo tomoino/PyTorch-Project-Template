@@ -2,6 +2,10 @@
 #
 # Default project 
 
+# MLflow configs
+experiment:
+  name: Default
+
 # Data configs
 data:
   dataset: 

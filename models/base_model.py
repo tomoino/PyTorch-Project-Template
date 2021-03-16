@@ -5,6 +5,7 @@ This model is inherited by all models.
 
 """
 
+import logging
 from pathlib import Path
 
 import torch
@@ -14,9 +15,14 @@ from models.helper import get_optimizer, get_criterion
 from metrics import get_metric
 
 
+log = logging.getLogger(__name__)
+
+
 class BaseModel(ABC):
 
     def __init__(self, cfg: object):
+        log.info(f'Building {cfg.model.name} model...')
+
         self.cfg = cfg
         self.network = None
         self.device = None
@@ -37,6 +43,8 @@ class BaseModel(ABC):
         self.set_optimizer()
         self.set_criterion()
         self.set_metric()
+
+        log.info(f"Successfully built {self.cfg.model.name} model.")
 
     def load_ckpt(self) -> None:
         """Loads checkpoint
