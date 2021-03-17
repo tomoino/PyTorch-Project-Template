@@ -37,4 +37,3 @@ model:
   name: resnet18
   pretrained: False
   initial_ckpt: 
-    # e.g) initial_ckpt: ./logs/2020-07-26T00:19:34.918002/ckpt/best_acc_ckpt.pth if resume. Blank if not resume

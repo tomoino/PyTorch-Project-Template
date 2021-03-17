@@ -36,7 +36,7 @@ $ python train.py -m \
 ```
 #### Evaluation
 ```bash
-$ python train.py eval=True
+$ python train.py eval=True project.model.initial_ckpt=best_ckpt.pth
 ```
 
 ### Check the results
@@ -88,7 +88,6 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 └── train.py
 ```
 ## TODO
-- [ ] evaluation mode
 - [ ] error handling
 - [ ] clear cache command
 - [ ] nohup
@@ -105,6 +104,7 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
 - [ ] docker-compose
+- [x] evaluation mode
 - [x] logger
 - [x] metrics
 - [x] mlflow
