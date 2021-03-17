@@ -7,6 +7,7 @@ import torchvision.models as models
 
 from models.base_model import BaseModel
 
+
 class Net(nn.Module):
     def __init__(self, in_channel, out_channel):
         super(Net, self).__init__()

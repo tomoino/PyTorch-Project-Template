@@ -51,7 +51,8 @@ def get_dataset(cfg: object, mode: str) -> tuple:
         filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
 
         if mode == "trainval":
-            return helper.classification_train_val_split(dataset=filtered_dataset, num_shot=cfg.data.dataset.num_shot)
+            num_shot = cfg.data.dataset.num_train_samples / cfg.data.dataset.num_class
+            return helper.classification_train_val_split(dataset=filtered_dataset, num_shot=num_shot)
         elif mode == "test":
             return filtered_dataset
             
@@ -61,7 +62,8 @@ def get_dataset(cfg: object, mode: str) -> tuple:
         filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
 
         if mode == "trainval":
-            return helper.classification_train_val_split(dataset=filtered_dataset, num_shot=cfg.data.dataset.num_shot)
+            num_shot = cfg.data.dataset.num_train_samples / cfg.data.dataset.num_class
+            return helper.classification_train_val_split(dataset=filtered_dataset, num_shot=num_shot)
         elif mode == "test":
             return filtered_dataset
     # elif dataset_name == "imagenet":

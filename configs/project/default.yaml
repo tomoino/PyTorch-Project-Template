@@ -13,7 +13,7 @@ data:
     rootdir: /workspace/datasets
     classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     num_class: 10
-    num_shot: 20
+    num_train_samples: 40000
     in_channel: 3
   sampler:
     name: balanced_batch_sampler
