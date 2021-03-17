@@ -28,7 +28,7 @@ def get_metric(cfg: object) -> object:
     metric_name = cfg.train.metric.name
 
     if metric_name not in SUPPORTED_METRIC:
-        NotImplementedError('The metric is not supported.')
+        raise NotImplementedError('The metric is not supported.')
 
     if metric_name == "classification":
         return ClassificationMetric(cfg)

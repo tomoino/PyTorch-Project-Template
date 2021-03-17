@@ -43,7 +43,7 @@ def get_dataset(cfg: object, mode: str) -> tuple:
     dataset_name = cfg.data.dataset.name
 
     if dataset_name not in SUPPORTED_DATASET:
-        NotImplementedError('The dataset is not supported.')
+        raise NotImplementedError('The dataset is not supported.')
 
     if dataset_name == "omniglot":
         _dataset = Omniglot(cfg, mode)
@@ -99,7 +99,7 @@ def get_sampler(cfg: object, mode: str, dataset: object) -> object:
     sampler_name = cfg.data.sampler.name
 
     if sampler_name not in SUPPORTED_SAMPLER:
-        NotImplementedError('The sampler is not supported.')
+        raise NotImplementedError('The sampler is not supported.')
 
     if sampler_name == "balanced_batch_sampler":
         if mode == "train":

@@ -14,6 +14,7 @@ data:
     classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     num_class: 10
     num_shot: 20
+    in_channel: 3
   sampler:
     name: balanced_batch_sampler
 
@@ -34,6 +35,6 @@ train:
 
 # Model configs
 model:
-  name: resnet18
+  name: simple_cnn
   pretrained: False
   initial_ckpt: 

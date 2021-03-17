@@ -44,6 +44,8 @@ You can use MLflow to check the results of your experiment.
 Access http://localhost:8888/ from your browser.
 If necessary, you can edit env.sh to change the port.
 
+## How to customize
+
 ## Structure
 ```bash
 $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"

@@ -163,7 +163,7 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
         artifacts_dir = mlflow.get_artifact_uri()
         ckpt_path = artifacts_dir.replace("file://","") + "/best_ckpt.pth"
         log.info("You can evaluate the model by running the following code.")
-        log.info(f"\t$ python train.py eval=True project.model.initial_ckpt={ckpt_path}")
+        log.info(f"$ python train.py eval=True project.model.initial_ckpt={ckpt_path}")
 
         mlflow.log_artifact("train.log")
         mlflow.log_artifact(".hydra/config.yaml")
