@@ -3,5 +3,5 @@ torchelastic==0.2.0
 torchtext==0.8.0
 torchvision==0.8.2
 hydra-core==1.0.6
-mlflow
+mlflow==1.14.1
 flake8

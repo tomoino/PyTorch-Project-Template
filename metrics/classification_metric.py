@@ -92,18 +92,19 @@ class ClassificationMetric:
                 "accuracy": acc,
                 "loss": loss,
             }
-            log.info(f"accuracy: {acc}")
-            log.info(f"loss: {loss}")
+            log.info(f"\taccuracy: {acc}")
+            log.info(f"\tloss: {loss}")
 
         elif mode == "eval":
             metrics = {
                 "val_accuracy": acc,
                 "val_loss": loss,
             }
-            log.info(f"val_accuracy: {acc}")
-            log.info(f"val_loss: {loss}")
+            log.info(f"\tval_accuracy: {acc}")
+            log.info(f"\tval_loss: {loss}")
 
-        mlflow.log_metrics(metrics, step = epoch)
+        if mlflow.active_run():
+            mlflow.log_metrics(metrics, step = epoch)
         self.model_score = acc
         
 

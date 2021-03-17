@@ -26,7 +26,7 @@ def save_ckpt(model: object, epoch: int) -> None:
 
     """
 
-    ckpt_path = "./best_acc_ckpt.pth"
+    ckpt_path = "./best_ckpt.pth"
 
     torch.save({
         'epoch': epoch,
@@ -160,6 +160,11 @@ def train(model: object, train_dataloader: object, val_dataloader: object) -> No
 
         log.info("Successfully trained the model.")
 
+        artifacts_dir = mlflow.get_artifact_uri()
+        ckpt_path = artifacts_dir.replace("file://","") + "/best_ckpt.pth"
+        log.info("You can evaluate the model by running the following code.")
+        log.info(f"$ python train.py eval=True project.model.initial_ckpt={ckpt_path}")
+
         mlflow.log_artifact("train.log")
         mlflow.log_artifact(".hydra/config.yaml")
-        mlflow.log_artifact("best_acc_ckpt.pth")
+        mlflow.log_artifact("best_ckpt.pth")

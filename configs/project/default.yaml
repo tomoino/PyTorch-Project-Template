@@ -13,7 +13,8 @@ data:
     rootdir: /workspace/datasets
     classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     num_class: 10
-    num_shot: 20
+    num_train_samples: 40000
+    in_channel: 3
   sampler:
     name: balanced_batch_sampler
 
@@ -34,7 +35,6 @@ train:
 
 # Model configs
 model:
-  name: resnet18
+  name: simple_cnn
   pretrained: False
   initial_ckpt: 
-    # e.g) initial_ckpt: ./logs/2020-07-26T00:19:34.918002/ckpt/best_acc_ckpt.pth if resume. Blank if not resume

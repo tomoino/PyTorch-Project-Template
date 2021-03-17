@@ -31,7 +31,7 @@ def get_optimizer(cfg: object, network: object) -> object:
     optimizer_name = cfg.name
 
     if optimizer_name not in SUPPORTED_OPTIMIZER:
-        NotImplementedError('The optimizer is not supported.')
+        raise NotImplementedError('The optimizer is not supported.')
 
     if optimizer_name == "adam":
         return optim.Adam(network.parameters(),
@@ -58,7 +58,7 @@ def get_criterion(cfg: object) -> object:
     criterion_name = cfg.name
 
     if criterion_name not in SUPPORTED_CRITERION:
-        NotImplementedError('The loss function is not supported.')
+        raise NotImplementedError('The loss function is not supported.')
 
     if criterion_name == "cross_entropy":
         return nn.CrossEntropyLoss()

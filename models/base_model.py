@@ -64,7 +64,7 @@ class BaseModel(ABC):
         if not ckpt_path.exists():
             raise ValueError(' The checkpoint is not found.')
 
-        ckpt = torch.load(resume)
+        ckpt = torch.load(ckpt_path)
         self.network.load_state_dict(ckpt['model_state_dict'])
 
 

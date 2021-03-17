@@ -1,26 +1,13 @@
-"""Supported datasets, samplers and models
+"""Supported infomation
 
-Information about supported datasets, samplers and models.
-
-Note:
-    You can add datasets, samplers or models.
-
-    When you want to add a dataset, you have to 
-        modify this file: SUPPORTED_DATASET
-        modify data/__init__.py: get_dataset function
-        add modeule to data/dataset/
-
-    When you want to add a sampler, you have to 
-        modify this file: SUPPORTED_SAMPLER
-        modify data/__init__.py: get_sampler function
-        add modeule to data/sampler/
+Information about supported datasets, samplers, models, optimizers, criterions and metrics.
 
 """
 
 
 SUPPORTED_DATASET = [
     "omniglot",
-    # "imagenet",
+    "cifar10",
 ]
 
 SUPPORTED_SAMPLER = [
@@ -29,6 +16,7 @@ SUPPORTED_SAMPLER = [
 
 SUPPORTED_MODEL = [
     "resnet18",
+    "simple_cnn",
 ]
 
 SUPPORTED_OPTIMIZER = [
