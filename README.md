@@ -64,7 +64,6 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 │   ├── dataloader.py
 │   ├── dataset
 │   │   ├── cifar10.py
-│   │   ├── imagenet.py
 │   │   └── omniglot.py
 │   ├── helper.py
 │   └── sampler
@@ -77,8 +76,6 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 │   ├── init.sh
 │   ├── requirements.txt
 │   └── run.sh
-├── executor
-│   └── __init__.py
 ├── metrics
 │   ├── __init__.py
 │   └── classification_metric.py
@@ -86,9 +83,16 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 │   ├── __init__.py
 │   ├── base_model.py
 │   ├── helper.py
-│   └── resnet18.py
-└── train.py
+│   └── networks
+│       ├── resnet18.py
+│       └── simple_cnn.py
+├── train.py
+└── trainers
+    ├── __init__.py
+    ├── base_trainer.py
+    └── default_trainer.py
 ```
+
 ## TODO
 - [ ] error handling
 - [ ] clear cache command
@@ -106,6 +110,7 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
 - [ ] docker-compose
+- [x] trainer
 - [x] evaluation mode
 - [x] logger
 - [x] metrics
