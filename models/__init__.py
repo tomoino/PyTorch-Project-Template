@@ -6,8 +6,8 @@ This is the module for models.
 """
 
 from configs.supported_info import SUPPORTED_MODEL
-from models.resnet18 import ResNet18
-from models.simple_cnn import SimpleCNN
+from models.networks.resnet18 import ResNet18
+from models.networks.simple_cnn import SimpleCNN
 
 
 def get_model(cfg: object) -> object:

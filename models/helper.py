@@ -30,6 +30,9 @@ def get_optimizer(cfg: object, network: object) -> object:
     
     optimizer_name = cfg.name
 
+    if not optimizer_name:
+        return None
+
     if optimizer_name not in SUPPORTED_OPTIMIZER:
         raise NotImplementedError('The optimizer is not supported.')
 
@@ -56,6 +59,9 @@ def get_criterion(cfg: object) -> object:
     """
     
     criterion_name = cfg.name
+
+    if not criterion_name:
+        return None
 
     if criterion_name not in SUPPORTED_CRITERION:
         raise NotImplementedError('The loss function is not supported.')

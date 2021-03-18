@@ -11,6 +11,7 @@ SUPPORTED_DATASET = [
 ]
 
 SUPPORTED_SAMPLER = [
+    "shuffle_sampler",
     "balanced_batch_sampler",
 ]
 
@@ -29,4 +30,8 @@ SUPPORTED_CRITERION = [
 
 SUPPORTED_METRIC = [
     "classification",
+]
+
+SUPPORTED_TRAINER = [
+    "default",
 ]

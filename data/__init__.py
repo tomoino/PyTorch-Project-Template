@@ -7,7 +7,7 @@ This is the module for handling data.
 
 import logging
 
-from torch.utils.data.sampler import BatchSampler, SequentialSampler
+from torch.utils.data.sampler import BatchSampler, SequentialSampler, RandomSampler
 
 from configs.supported_info import SUPPORTED_DATASET, SUPPORTED_SAMPLER
 import data.helper
@@ -45,9 +45,9 @@ def get_dataset(cfg: object, mode: str) -> tuple:
         raise NotImplementedError('The dataset is not supported.')
 
     if dataset_name == "omniglot":
-        _dataset = Omniglot(cfg, mode)
-        _classes = list(range(cfg.data.dataset.num_class))
-        filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
+        dataset = Omniglot(cfg, mode)
+        classes = list(range(cfg.data.dataset.num_class))
+        filtered_dataset = helper.class_filter(dataset=dataset, classes=classes)
 
         if mode == "trainval":
             num_shot = cfg.data.dataset.num_train_samples / cfg.data.dataset.num_class
@@ -56,9 +56,9 @@ def get_dataset(cfg: object, mode: str) -> tuple:
             return filtered_dataset
             
     elif dataset_name == "cifar10":
-        _dataset = CIFAR10(cfg, mode)
-        _classes = list(range(cfg.data.dataset.num_class))
-        filtered_dataset = helper.class_filter(dataset=_dataset, classes=_classes)
+        dataset = CIFAR10(cfg, mode)
+        classes = list(range(cfg.data.dataset.num_class))
+        filtered_dataset = helper.class_filter(dataset=dataset, classes=classes)
 
         if mode == "trainval":
             num_shot = cfg.data.dataset.num_train_samples / cfg.data.dataset.num_class
@@ -93,7 +93,10 @@ def get_sampler(cfg: object, mode: str, dataset: object) -> object:
     if sampler_name not in SUPPORTED_SAMPLER:
         raise NotImplementedError('The sampler is not supported.')
 
-    if sampler_name == "balanced_batch_sampler":
+    if sampler_name == "shuffle_sampler":
+        return BatchSampler(RandomSampler(dataset), batch_size=cfg.train.batch_size, drop_last=True)
+        
+    elif sampler_name == "balanced_batch_sampler":
         if mode == "train":
             return BalancedBatchSampler(cfg, dataset=dataset)
 
