@@ -106,6 +106,7 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
 - [ ] docker-compose
+- [ ] assertion
 - [x] evaluation mode
 - [x] logger
 - [x] metrics
