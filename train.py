@@ -40,5 +40,6 @@ def main(cfg: DictConfig) -> None:
         test_dataloader = get_dataloader(cfg.project, mode="test")
         eval(model=model, eval_dataloader=test_dataloader)
 
+
 if __name__ == '__main__':
     main()

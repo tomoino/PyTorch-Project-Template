@@ -11,7 +11,7 @@ class DataLoader(torch.utils.data.DataLoader):
 
     """
 
-    def __init__(self, cfg: object, dataset: object, sampler: object):
+    def __init__(self, cfg: object, dataset: object, sampler: object) -> None:
         """Initialization
     
         Get data loader.
