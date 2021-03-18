@@ -5,7 +5,10 @@ from torch.utils.data.sampler import BatchSampler, RandomSampler
 
 
 class BalancedBatchSampler(BatchSampler):
-    def __init__(self, cfg: object, dataset: object):
+    """Balanced Batch Sampler"""
+
+
+    def __init__(self, cfg: object, dataset: object) -> None:
         """Initialization
     
         Balanced batch sampler.
@@ -42,5 +45,5 @@ class BalancedBatchSampler(BatchSampler):
             if len(batches[target_batch_id]) == self.batch_size:
                 yield batches[target_batch_id]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.sampler) // self.batch_size

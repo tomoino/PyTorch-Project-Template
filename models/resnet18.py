@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""ResNet18
-
-"""
+"""ResNet18"""
 
 import torch.nn as nn
 import torchvision.models as models
@@ -10,7 +8,9 @@ from models.base_model import BaseModel
 
 
 class ResNet18(BaseModel):
-    def __init__(self, cfg: object):
+    """ResNet18"""
+
+    def __init__(self, cfg: object) -> None:
         """Initialization
     
         Build model.

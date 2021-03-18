@@ -9,7 +9,18 @@ from models.base_model import BaseModel
 
 
 class Net(nn.Module):
-    def __init__(self, in_channel, out_channel):
+    """Network for SimpleCNN"""
+
+
+    def __init__(self, in_channel, out_channel) -> None:
+        """Initialization
+
+        Args:
+            in_channel: Channel of input.
+            out_channel: Channel of output.
+
+        """
+
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(in_channel, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
@@ -17,6 +28,7 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, out_channel)
+
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -29,7 +41,10 @@ class Net(nn.Module):
 
 
 class SimpleCNN(BaseModel):
-    def __init__(self, cfg: object):
+    """SimpleCNN"""
+
+
+    def __init__(self, cfg: object) -> None:
         """Initialization
     
         Build model.

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Abstract base model
-
-This model is inherited by all models.
-
-"""
+"""Abstract base model"""
 
 import logging
 from pathlib import Path
@@ -19,8 +15,27 @@ log = logging.getLogger(__name__)
 
 
 class BaseModel(ABC):
+    """Abstract base model
 
-    def __init__(self, cfg: object):
+    This model is inherited by all models.
+
+    Attributes:
+        cfg: Config.
+        network: Network object.
+        device: Device. torch.device('cuda') or torch.device('cpu').
+        optimizer: Optimizer object.
+        criterion: Criterion object.
+
+    """
+
+    def __init__(self, cfg: object) -> None:
+        """Initialization
+
+        Args:
+            cfg: Config.
+
+        """
+
         log.info(f'Building {cfg.model.name} model...')
 
         self.cfg = cfg
@@ -69,7 +84,7 @@ class BaseModel(ABC):
 
 
     def setup_device(self) -> None:
-        """Setup device """
+        """Setup device"""
 
         if torch.cuda.is_available():
             self.device = torch.device('cuda')
@@ -80,15 +95,15 @@ class BaseModel(ABC):
 
 
     def set_optimizer(self) -> None:
-        """Set optimizer """
+        """Set optimizer"""
         self.optimizer = get_optimizer(self.cfg.train.optimizer, self.network)
 
 
     def set_criterion(self) -> None:
-        """Set criterion """
+        """Set criterion"""
         self.criterion = get_criterion(self.cfg.train.criterion)
 
 
     def set_metric(self) -> None:
-        """Set metric """
+        """Set metric"""
         self.metric = get_metric(self.cfg)

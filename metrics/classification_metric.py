@@ -27,8 +27,8 @@ class ClassificationMetric:
     Note:
         At the beginning of every epoch, loss_list and cmx must be empty.
 
-
     """
+
 
     def __init__(self, cfg: object) -> None:
         """Initialization
@@ -55,6 +55,7 @@ class ClassificationMetric:
             loss: Loss.
 
         """
+
         stacked = torch.stack((targets, preds), dim=1)
         for p in stacked:
             tl, pl = p.tolist()
@@ -63,7 +64,7 @@ class ClassificationMetric:
         self.loss_list.append(loss)
 
         
-    def calc(self, epoch: int, mode: str):
+    def calc(self, epoch: int, mode: str) -> None:
         """Calculate metrics
         
         Calculates accuracy, loss, precision, recall and f1score.

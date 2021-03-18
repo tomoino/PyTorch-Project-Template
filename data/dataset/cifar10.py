@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-"""CIFAR10 dataset
-
-"""
+"""CIFAR10 dataset"""
 
 import torch
 from torchvision import datasets, transforms
 
+
 class CIFAR10(datasets.CIFAR10):
-    def __init__(self, cfg: object, mode: str):
+    """CIFAR10 dataset"""
+
+
+    def __init__(self, cfg: object, mode: str) -> None:
         """Initialization
     
         Get CIFAR10 dataset.

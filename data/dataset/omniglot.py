@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Omniglot dataset
-
-"""
+"""Omniglot dataset"""
 
 from torchvision import datasets, transforms
 
 class Omniglot(datasets.Omniglot):
-    def __init__(self, cfg: object, mode: str):
+    """Omniglot dataset"""
+
+
+    def __init__(self, cfg: object, mode: str) -> None:
         """Initialization
     
         Get Omniglot dataset.
