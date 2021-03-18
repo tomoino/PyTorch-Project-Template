@@ -11,6 +11,7 @@ SUPPORTED_DATASET = [
 ]
 
 SUPPORTED_SAMPLER = [
+    "shuffle_sampler",
     "balanced_batch_sampler",
 ]
 
