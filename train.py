@@ -12,9 +12,7 @@ Args:
 import hydra
 from omegaconf import DictConfig
 
-from models import get_model
-from data import get_dataloader
-from executor import train, eval
+from trainers import get_trainer
 
 
 @hydra.main(config_path="configs", config_name="config")
@@ -31,14 +29,8 @@ def main(cfg: DictConfig) -> None:
 
     """
 
-    model = get_model(cfg.project)
-
-    if not cfg.eval:
-        train_dataloader, val_dataloader = get_dataloader(cfg.project, mode="trainval")
-        train(model=model, train_dataloader=train_dataloader, val_dataloader=val_dataloader)
-    else:
-        test_dataloader = get_dataloader(cfg.project, mode="test")
-        eval(model=model, eval_dataloader=test_dataloader)
+    trainer = get_trainer(cfg.project)
+    trainer.execute(eval=cfg.eval)
 
 
 if __name__ == '__main__':

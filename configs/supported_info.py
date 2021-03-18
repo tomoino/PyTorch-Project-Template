@@ -31,3 +31,7 @@ SUPPORTED_CRITERION = [
 SUPPORTED_METRIC = [
     "classification",
 ]
+
+SUPPORTED_TRAINER = [
+    "default",
+]

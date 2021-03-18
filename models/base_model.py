@@ -61,6 +61,7 @@ class BaseModel(ABC):
 
         log.info(f"Successfully built {self.cfg.model.name} model.")
 
+
     def load_ckpt(self) -> None:
         """Loads checkpoint
 
@@ -81,6 +82,25 @@ class BaseModel(ABC):
 
         ckpt = torch.load(ckpt_path)
         self.network.load_state_dict(ckpt['model_state_dict'])
+
+
+    def save_ckpt(self, epoch: int, ckpt_path: str) -> None:
+        """Save checkpoint
+
+        Saves checkpoint.
+
+        Args:
+            epoch: Number of epoch.
+            ckpt_path: Path of checkpoint.
+
+        """
+
+        torch.save({
+            'epoch': epoch,
+            'model': self.network,
+            'model_state_dict': self.network.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+        }, ckpt_path)
 
 
     def setup_device(self) -> None:

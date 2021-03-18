@@ -20,6 +20,8 @@ data:
 
 # Training configs
 train:
+  trainer:
+    name: default
   batch_size: 10
   epochs: 3
   optimizer:
@@ -32,6 +34,7 @@ train:
     name: classification
   save_best_ckpt: True
   num_workers: 2
+  ckpt_path: best_ckpt.pth
 
 # Model configs
 model:
