@@ -94,22 +94,24 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 ```
 
 ## TODO
-- [ ] error handling
-- [ ] clear cache command
 - [ ] nohup
 - [ ] optuna
-- [ ] basic metrics
+- [ ] scheduler
 - [ ] flake8
+- [ ] error handling
+- [ ] clear cache command
+- [ ] basic metrics
+- [ ] assertion
 - [ ] notification
 - [ ] FP16 (apex)
 - [ ] classmethod, staticmethod
 - [ ] value error
 - [ ] usage as template
-- [ ] pytorch-lightning
 - [ ] multi-gpu
 - [ ] refactoring on cfg to make the modules easy to reuse.
 - [ ] utils.paths
 - [ ] docker-compose
+- [ ] pytorch-lightning
 - [x] trainer
 - [x] evaluation mode
 - [x] logger
