@@ -94,7 +94,6 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 ```
 
 ## TODO
-- [ ] nohup
 - [ ] optuna
 - [ ] scheduler
 - [ ] flake8
@@ -109,7 +108,7 @@ $ tree -I "datasets|mlruns|__pycache__|outputs|multirun"
 - [ ] usage as template
 - [ ] multi-gpu
 - [ ] refactoring on cfg to make the modules easy to reuse.
-- [ ] utils.paths
+- [ ] nohup
 - [ ] docker-compose
 - [ ] pytorch-lightning
 - [x] trainer
