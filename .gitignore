@@ -134,3 +134,4 @@ logs/
 outputs/
 multirun/
 mlruns/
+docker/env_dev.sh

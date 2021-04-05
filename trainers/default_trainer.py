@@ -129,6 +129,8 @@ class DefaultTrainer(BaseTrainer):
             model_score: Indicator of the excellence of model. The higher the value, the better.
 
         """
+        
+        super().eval()
 
         if not eval_dataloader:
             eval_dataloader = self.test_dataloader
