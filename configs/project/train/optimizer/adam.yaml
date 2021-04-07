@@ -1,0 +1,7 @@
+# @package _group_
+#
+# adam optimizer
+
+name: adam
+lr: 0.0001
+decay: 0.0001

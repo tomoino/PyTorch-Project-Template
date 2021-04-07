@@ -1,43 +1,32 @@
-# @package _group_
-#
 # Default project 
+
+# Import presets
+defaults:
+  - hydra/job_logging: custom
+  - data/dataset: cifar10
+  - data/sampler: balanced_batch_sampler
+  - train/trainer: default
+  - train/criterion: cross_entropy
+  - train/metric: classification
+  - model: simple_cnn
 
 # MLflow configs
 experiment:
   name: Default
 
-# Data configs
-data:
-  dataset: 
-    name: cifar10
-    rootdir: /workspace/datasets
-    classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    num_class: 10
-    num_train_samples: 40000
-    in_channel: 3
-  sampler:
-    name: balanced_batch_sampler
-
 # Training configs
 train:
-  trainer:
-    name: default
   batch_size: 10
-  epochs: 3
+  epochs: 1
+  save_best_ckpt: True
+  num_workers: 2
+  ckpt_path: best_ckpt.pth
+  eval: False
   optimizer:
     name: adam
     lr: 0.0001
     decay: 0.0001
-  criterion:
-    name: cross_entropy
-  metric:
-    name: classification
-  save_best_ckpt: True
-  num_workers: 2
-  ckpt_path: best_ckpt.pth
 
 # Model configs
 model:
-  name: simple_cnn
-  pretrained: False
   initial_ckpt: 

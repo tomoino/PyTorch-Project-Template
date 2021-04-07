@@ -15,7 +15,7 @@ from omegaconf import DictConfig
 from trainers import get_trainer
 
 
-@hydra.main(config_path="configs", config_name="config")
+@hydra.main(config_path="configs/project", config_name="default")
 def main(cfg: DictConfig) -> None:
     """Main function
     
@@ -29,8 +29,8 @@ def main(cfg: DictConfig) -> None:
 
     """
 
-    trainer = get_trainer(cfg.project)
-    trainer.execute(eval=cfg.eval)
+    trainer = get_trainer(cfg)
+    trainer.execute(eval=cfg.train.eval)
 
 
 if __name__ == '__main__':

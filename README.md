@@ -18,9 +18,9 @@ $ sh docker/exec.sh
     ```bash
     $ vi ./configs/project/new_project.yaml
     ```
-1. Run train.py with project option
+1. Run train.py with -cn (or --config-name) flag to specify project
     ```bash
-    $ python train.py project=new_project
+    $ python train.py -cn new_project
     ```
 
 ### Training
@@ -31,17 +31,17 @@ $ python train.py
 You can run train.py with multiple different configurations.
 ```bash
 $ python train.py -m \
-    project.train.batch_size=16,32 \
-    project.train.optimizer.lr=0.01,0.001
+    train.batch_size=16,32 \
+    train.optimizer.lr=0.01,0.001
 ```
 #### Evaluation
 ```bash
-$ python train.py eval=True project.model.initial_ckpt=best_ckpt.pth
+$ python train.py train.eval=True model.initial_ckpt=best_ckpt.pth
 ```
 
 ### Check the results
 You can use MLflow to check the results of your experiment.
-Access http://localhost:8888/ from your browser.
+Access http://localhost:5000/ from your browser.
 If necessary, you can edit env.sh to change the port.
 
 ## How to customize

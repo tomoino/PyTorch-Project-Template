@@ -1,6 +1,0 @@
-defaults:
-  - project: default
-  - hydra/job_logging: custom
-
-# Arguments
-eval: False

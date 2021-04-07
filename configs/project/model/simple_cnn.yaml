@@ -1,0 +1,6 @@
+# @package _group_
+#
+# SimpleCNN
+
+name: simple_cnn
+pretrained: False
