@@ -1,0 +1,5 @@
+# @package _group_
+#
+# balanced batch sampler
+
+name: balanced_batch_sampler

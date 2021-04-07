@@ -1,0 +1,10 @@
+# @package _group_
+#
+# cifar10 dataset
+
+name: cifar10
+rootdir: /workspace/datasets
+classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+num_class: 10
+num_train_samples: 40000
+in_channel: 3
