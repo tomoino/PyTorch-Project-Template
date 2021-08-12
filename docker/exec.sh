@@ -5,4 +5,4 @@
 . docker/env.sh
 docker exec \
   -it \
-  $CONTAINER_NAME sudo fish
+  $CONTAINER_NAME fish
