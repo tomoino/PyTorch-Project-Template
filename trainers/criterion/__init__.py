@@ -8,7 +8,10 @@ These functions are for criterion.
 import torch.optim as optim
 import torch.nn as nn
 
-from configs.supported_info import SUPPORTED_CRITERION
+
+SUPPORTED_CRITERION = {
+    "cross_entropy": nn.CrossEntropyLoss,
+}
 
 
 def get_criterion(cfg: object) -> object:
@@ -35,5 +38,5 @@ def get_criterion(cfg: object) -> object:
     if criterion_name not in SUPPORTED_CRITERION:
         raise NotImplementedError('The loss function is not supported.')
 
-    if criterion_name == "cross_entropy":
-        return nn.CrossEntropyLoss()
+    return SUPPORTED_CRITERION[criterion_name]()
+    

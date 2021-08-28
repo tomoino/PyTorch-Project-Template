@@ -5,8 +5,12 @@ These functions are for execution.
 
 """
 
-from configs.supported_info import SUPPORTED_TRAINER
 from trainers.default_trainer import DefaultTrainer
+
+
+SUPPORTED_TRAINER = {
+    "default": DefaultTrainer,
+}
 
 
 def get_trainer(cfg: object) -> object:
@@ -28,6 +32,5 @@ def get_trainer(cfg: object) -> object:
     if trainer_name not in SUPPORTED_TRAINER:
         raise NotImplementedError('The trainer is not supported.')
 
-    if trainer_name == "default":
-        return DefaultTrainer(cfg)
+    return SUPPORTED_TRAINER[trainer_name](cfg)
         
