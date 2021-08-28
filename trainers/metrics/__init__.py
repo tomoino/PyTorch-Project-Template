@@ -6,6 +6,7 @@ These functions are for metrics.
 """
 
 from configs.supported_info import SUPPORTED_METRICS
+from trainers.metrics.default_metrics import DefaultMetrics
 from trainers.metrics.classification_metrics import ClassificationMetrics
 
 
@@ -32,6 +33,9 @@ def get_metrics(cfg: object) -> object:
 
     if metrics_name not in SUPPORTED_METRICS:
         raise NotImplementedError('The metrics is not supported.')
+
+    if metrics_name == "default":
+        return DefaultMetrics(cfg)
 
     if metrics_name == "classification":
         return ClassificationMetrics(cfg)

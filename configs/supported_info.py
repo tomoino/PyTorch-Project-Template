@@ -28,10 +28,10 @@ SUPPORTED_CRITERION = [
 ]
 
 SUPPORTED_METRICS = [
+    "default",
     "classification",
 ]
 
 SUPPORTED_TRAINER = [
     "default",
-    "classification",
 ]

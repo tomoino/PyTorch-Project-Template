@@ -31,6 +31,7 @@ class DefaultTrainer(BaseTrainer):
     
         Args:
             cfg: Config of project.
+
         """
 
         super().__init__(cfg)
@@ -43,11 +44,14 @@ class DefaultTrainer(BaseTrainer):
 
     def execute(self, eval: bool) -> None:
         """Execution
+
         Execute train or eval.
+
         Args:
             eval: For evaluation mode.
                 True: Execute eval.
                 False: Execute train.
+
         """
 
         if not eval:
@@ -61,7 +65,9 @@ class DefaultTrainer(BaseTrainer):
 
     def train(self) -> None:
         """Train
+
         Trains model.
+
         """
 
         super().train()
@@ -97,7 +103,7 @@ class DefaultTrainer(BaseTrainer):
 
                 self.metrics.epoch_update(epoch, mode='train')
                 self.eval(eval_dataloader=self.val_dataloader, epoch=epoch)
-                
+
                 if self.metrics.judge_update_ckpt:
                     self.model.save_ckpt(epoch=epoch, ckpt_path=self.cfg.train.ckpt_path)
                     log.info("Saved the check point.")
@@ -105,3 +111,46 @@ class DefaultTrainer(BaseTrainer):
             log.info("Successfully trained the model.")
 
             self.log_artifacts()
+
+
+    def eval(self, eval_dataloader: object = None, epoch: int = 0) -> float:
+        """Evaluation
+
+        Evaluates model.
+
+        Args:
+            eval_dataloader: Dataloader.
+            epoch: Number of epoch.
+
+        Returns:
+            model_score: Indicator of the excellence of model. The higher the value, the better.
+
+        """
+        
+        super().eval()
+
+        if not eval_dataloader:
+            eval_dataloader = self.test_dataloader
+
+        self.model.network.eval()
+
+        with torch.no_grad():
+            with tqdm(eval_dataloader, ncols=100) as pbar:
+                for idx, (inputs, targets) in enumerate(pbar):
+                    inputs = inputs.to(self.model.device)
+                    targets = targets.to(self.model.device)
+
+                    outputs = self.model.network(inputs)
+
+                    loss = self.model.criterion(outputs, targets)
+                    self.model.optimizer.zero_grad()
+
+                    self.metrics.batch_update(outputs=outputs.cpu().detach().clone(),
+                                        targets=targets.cpu().detach().clone(),
+                                        loss=loss.item())
+
+                    pbar.set_description(f'eval epoch: {epoch}')
+        
+        self.metrics.epoch_update(epoch, mode='eval')
+
+        return self.metrics.model_score
