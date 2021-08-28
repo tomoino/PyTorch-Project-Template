@@ -98,7 +98,7 @@ class BaseTrainer(ABC):
         artifacts_dir = mlflow.get_artifact_uri()
         ckpt_path = f"{artifacts_dir.replace('file://','')}/{self.cfg.train.ckpt_path}"
         log.info("You can evaluate the model by running the following code.")
-        log.info(f"$ python train.py eval=True project.model.initial_ckpt={ckpt_path}")
+        log.info(f"$ python train.py train.eval=True model.initial_ckpt={ckpt_path}")
 
         mlflow.log_artifact("train.log")
         mlflow.log_artifact(".hydra/config.yaml")

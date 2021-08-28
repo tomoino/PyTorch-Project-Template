@@ -6,7 +6,6 @@ Information about supported datasets, samplers, models, optimizers, criterions a
 
 
 SUPPORTED_DATASET = [
-    "omniglot",
     "cifar10",
 ]
 
