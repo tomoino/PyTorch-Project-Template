@@ -27,10 +27,11 @@ SUPPORTED_CRITERION = [
     "cross_entropy",
 ]
 
-SUPPORTED_METRIC = [
+SUPPORTED_METRICS = [
     "classification",
 ]
 
 SUPPORTED_TRAINER = [
     "default",
+    "classification",
 ]

@@ -7,6 +7,7 @@ These functions are for execution.
 
 from configs.supported_info import SUPPORTED_TRAINER
 from trainers.default_trainer import DefaultTrainer
+from trainers.classification_trainer import ClassificationTrainer
 
 
 def get_trainer(cfg: object) -> object:
@@ -30,3 +31,6 @@ def get_trainer(cfg: object) -> object:
 
     if trainer_name == "default":
         return DefaultTrainer(cfg)
+        
+    if trainer_name == "classification":
+        return ClassificationTrainer(cfg)
