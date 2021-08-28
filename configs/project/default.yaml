@@ -7,7 +7,7 @@ defaults:
   - data/sampler: balanced_batch_sampler
   - train/trainer: default
   - train/criterion: cross_entropy
-  - train/metrics: default
+  - train/metrics: classification
   - model: simple_cnn
 
 # MLflow configs

@@ -12,6 +12,7 @@ from trainers.base_trainer import BaseTrainer
 from models import get_model
 from data import get_dataloader
 from trainers.metrics import get_metrics
+from trainers.optimizer import get_optimizer
 
 
 log = logging.getLogger(__name__)
@@ -40,6 +41,7 @@ class DefaultTrainer(BaseTrainer):
         self.val_dataloader = None
         self.test_dataloader = None
         self.metrics = get_metrics(self.cfg)
+        self.optimizer = get_optimizer(self.cfg, self.model.network)
 
 
     def execute(self, eval: bool) -> None:
@@ -92,8 +94,8 @@ class DefaultTrainer(BaseTrainer):
 
                         loss.backward()
 
-                        self.model.optimizer.step()
-                        self.model.optimizer.zero_grad()
+                        self.optimizer.step()
+                        self.optimizer.zero_grad()
 
                         self.metrics.batch_update(outputs=outputs.cpu().detach().clone(),
                                             targets=targets.cpu().detach().clone(),
@@ -105,7 +107,7 @@ class DefaultTrainer(BaseTrainer):
                 self.eval(eval_dataloader=self.val_dataloader, epoch=epoch)
 
                 if self.metrics.judge_update_ckpt:
-                    self.model.save_ckpt(epoch=epoch, ckpt_path=self.cfg.train.ckpt_path)
+                    self.save_ckpt(epoch=epoch)
                     log.info("Saved the check point.")
 
             log.info("Successfully trained the model.")
@@ -143,7 +145,7 @@ class DefaultTrainer(BaseTrainer):
                     outputs = self.model.network(inputs)
 
                     loss = self.model.criterion(outputs, targets)
-                    self.model.optimizer.zero_grad()
+                    self.optimizer.zero_grad()
 
                     self.metrics.batch_update(outputs=outputs.cpu().detach().clone(),
                                         targets=targets.cpu().detach().clone(),

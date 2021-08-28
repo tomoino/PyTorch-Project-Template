@@ -103,3 +103,23 @@ class BaseTrainer(ABC):
         mlflow.log_artifact("train.log")
         mlflow.log_artifact(".hydra/config.yaml")
         mlflow.log_artifact(self.cfg.train.ckpt_path)
+
+    
+    def save_ckpt(self, epoch: int) -> None:
+        """Save checkpoint
+
+        Saves checkpoint.
+
+        Args:
+            epoch: Number of epoch.
+
+        """
+
+        ckpt_path = self.cfg.train.ckpt_path
+
+        torch.save({
+            'epoch': epoch,
+            'model': self.model.network,
+            'model_state_dict': self.model.network.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+        }, ckpt_path)

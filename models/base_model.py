@@ -7,7 +7,7 @@ from pathlib import Path
 import torch
 from abc import ABC
 
-from models.helper import get_optimizer, get_criterion
+from models.helper import get_criterion
 
 
 log = logging.getLogger(__name__)
@@ -40,7 +40,6 @@ class BaseModel(ABC):
         self.cfg = cfg
         self.network = None
         self.device = None
-        self.optimizer = None
         self.criterion = None
 
 
@@ -54,7 +53,6 @@ class BaseModel(ABC):
 
         self.load_ckpt()
         self.setup_device()
-        self.set_optimizer()
         self.set_criterion()
 
         log.info(f"Successfully built {self.cfg.model.name} model.")
@@ -82,25 +80,6 @@ class BaseModel(ABC):
         self.network.load_state_dict(ckpt['model_state_dict'])
 
 
-    def save_ckpt(self, epoch: int, ckpt_path: str) -> None:
-        """Save checkpoint
-
-        Saves checkpoint.
-
-        Args:
-            epoch: Number of epoch.
-            ckpt_path: Path of checkpoint.
-
-        """
-
-        torch.save({
-            'epoch': epoch,
-            'model': self.network,
-            'model_state_dict': self.network.state_dict(),
-            'optimizer_state_dict': self.optimizer.state_dict(),
-        }, ckpt_path)
-
-
     def setup_device(self) -> None:
         """Setup device"""
 
@@ -110,11 +89,6 @@ class BaseModel(ABC):
             self.device = torch.device('cpu')
 
         self.network = self.network.to(self.device)
-
-
-    def set_optimizer(self) -> None:
-        """Set optimizer"""
-        self.optimizer = get_optimizer(self.cfg.train.optimizer, self.network)
 
 
     def set_criterion(self) -> None:
