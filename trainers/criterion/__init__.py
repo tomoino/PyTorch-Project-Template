@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Models helper
+"""Criterion
 
-These are helper functions for models.
+These functions are for criterion.
 
 """
 
 import torch.optim as optim
 import torch.nn as nn
 
-from configs.supported_info import SUPPORTED_OPTIMIZER, SUPPORTED_CRITERION
+from configs.supported_info import SUPPORTED_CRITERION
 
 
 def get_criterion(cfg: object) -> object:
@@ -27,7 +27,7 @@ def get_criterion(cfg: object) -> object:
 
     """
     
-    criterion_name = cfg.name
+    criterion_name = cfg.train.criterion.name
 
     if not criterion_name:
         return None

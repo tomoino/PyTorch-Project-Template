@@ -7,8 +7,6 @@ from pathlib import Path
 import torch
 from abc import ABC
 
-from models.helper import get_criterion
-
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +38,6 @@ class BaseModel(ABC):
         self.cfg = cfg
         self.network = None
         self.device = None
-        self.criterion = None
 
 
     def build(self) -> None:
@@ -53,7 +50,6 @@ class BaseModel(ABC):
 
         self.load_ckpt()
         self.setup_device()
-        self.set_criterion()
 
         log.info(f"Successfully built {self.cfg.model.name} model.")
 
@@ -89,8 +85,3 @@ class BaseModel(ABC):
             self.device = torch.device('cpu')
 
         self.network = self.network.to(self.device)
-
-
-    def set_criterion(self) -> None:
-        """Set criterion"""
-        self.criterion = get_criterion(self.cfg.train.criterion)

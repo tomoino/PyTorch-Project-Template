@@ -13,6 +13,7 @@ from models import get_model
 from data import get_dataloader
 from trainers.metrics import get_metrics
 from trainers.optimizer import get_optimizer
+from trainers.criterion import get_criterion
 
 
 log = logging.getLogger(__name__)
@@ -42,6 +43,7 @@ class DefaultTrainer(BaseTrainer):
         self.test_dataloader = None
         self.metrics = get_metrics(self.cfg)
         self.optimizer = get_optimizer(self.cfg, self.model.network)
+        self.criterion = get_criterion(self.cfg)
 
 
     def execute(self, eval: bool) -> None:
@@ -90,7 +92,7 @@ class DefaultTrainer(BaseTrainer):
                         targets = targets.to(self.model.device)
                         outputs = self.model.network(inputs)
 
-                        loss = self.model.criterion(outputs, targets)
+                        loss = self.criterion(outputs, targets)
 
                         loss.backward()
 
@@ -144,7 +146,7 @@ class DefaultTrainer(BaseTrainer):
 
                     outputs = self.model.network(inputs)
 
-                    loss = self.model.criterion(outputs, targets)
+                    loss = self.criterion(outputs, targets)
                     self.optimizer.zero_grad()
 
                     self.metrics.batch_update(outputs=outputs.cpu().detach().clone(),
