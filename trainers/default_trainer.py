@@ -6,10 +6,12 @@ import logging
 from tqdm import tqdm
 import torch
 import mlflow
+from omegaconf import DictConfig
 
 from trainers.base_trainer import BaseTrainer
 from models import get_model
 from data import get_dataloader
+from trainers.metrics import get_metrics
 
 
 log = logging.getLogger(__name__)
@@ -24,7 +26,7 @@ class DefaultTrainer(BaseTrainer):
     
     """
 
-    def __init__(self, cfg: object) -> None:
+    def __init__(self, cfg: DictConfig) -> None:
         """Initialization
     
         Args:
@@ -37,6 +39,7 @@ class DefaultTrainer(BaseTrainer):
         self.train_dataloader = None
         self.val_dataloader = None
         self.test_dataloader = None
+        self.metrics = get_metrics(self.cfg)
 
 
     def execute(self, eval: bool) -> None:
@@ -69,8 +72,7 @@ class DefaultTrainer(BaseTrainer):
 
         super().train()
 
-        epochs = range(self.model.cfg.train.epochs)
-        best_score = 0.0
+        epochs = range(self.cfg.train.epochs)
 
         with mlflow.start_run():
             self.log_params()
@@ -93,21 +95,16 @@ class DefaultTrainer(BaseTrainer):
                         self.model.optimizer.step()
                         self.model.optimizer.zero_grad()
 
-                        preds = outputs.argmax(axis=1)
-                        self.model.metric.update(preds=preds.cpu().detach().clone(),
+                        self.metrics.batch_update(outputs=outputs.cpu().detach().clone(),
                                             targets=targets.cpu().detach().clone(),
                                             loss=loss.item())
 
                         pbar.set_description(f'train epoch:{epoch}')
 
-                self.model.metric.calc(epoch, mode='train')
-                self.model.metric.reset_states()
+                self.metrics.epoch_update(epoch, mode='train')
+                self.eval(eval_dataloader=self.val_dataloader, epoch=epoch)
 
-                model_score = self.eval(eval_dataloader=self.val_dataloader, epoch=epoch)
-                self.model.metric.reset_states()
-
-                if model_score > best_score:
-                    best_score = model_score
+                if self.metrics.judge_update_ckpt:
                     self.model.save_ckpt(epoch=epoch, ckpt_path=self.cfg.train.ckpt_path)
                     log.info("Saved the check point.")
 
@@ -148,14 +145,12 @@ class DefaultTrainer(BaseTrainer):
                     loss = self.model.criterion(outputs, targets)
                     self.model.optimizer.zero_grad()
 
-                    preds = outputs.argmax(axis=1)
-                    self.model.metric.update(preds=preds.cpu().detach().clone(),
+                    self.metrics.batch_update(outputs=outputs.cpu().detach().clone(),
                                         targets=targets.cpu().detach().clone(),
                                         loss=loss.item())
 
                     pbar.set_description(f'eval epoch: {epoch}')
         
-        self.model.metric.calc(epoch, mode='eval')
-        self.model.metric.reset_states()
+        self.metrics.epoch_update(epoch, mode='eval')
 
-        return self.model.metric.model_score
+        return self.metrics.model_score

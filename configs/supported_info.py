@@ -27,7 +27,8 @@ SUPPORTED_CRITERION = [
     "cross_entropy",
 ]
 
-SUPPORTED_METRIC = [
+SUPPORTED_METRICS = [
+    "default",
     "classification",
 ]
 

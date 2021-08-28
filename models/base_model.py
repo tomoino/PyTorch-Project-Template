@@ -8,7 +8,6 @@ import torch
 from abc import ABC
 
 from models.helper import get_optimizer, get_criterion
-from metrics import get_metric
 
 
 log = logging.getLogger(__name__)
@@ -57,7 +56,6 @@ class BaseModel(ABC):
         self.setup_device()
         self.set_optimizer()
         self.set_criterion()
-        self.set_metric()
 
         log.info(f"Successfully built {self.cfg.model.name} model.")
 
@@ -122,8 +120,3 @@ class BaseModel(ABC):
     def set_criterion(self) -> None:
         """Set criterion"""
         self.criterion = get_criterion(self.cfg.train.criterion)
-
-
-    def set_metric(self) -> None:
-        """Set metric"""
-        self.metric = get_metric(self.cfg)

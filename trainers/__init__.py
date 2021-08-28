@@ -30,3 +30,4 @@ def get_trainer(cfg: object) -> object:
 
     if trainer_name == "default":
         return DefaultTrainer(cfg)
+        

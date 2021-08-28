@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Classification metric"""
+"""Classification metrics"""
 
 import logging
 from statistics import mean
@@ -7,14 +7,16 @@ from statistics import mean
 import torch
 import mlflow
 
+from trainers.metrics.base_metrics import BaseMetrics
+
 
 log = logging.getLogger(__name__)
 
 
-class ClassificationMetric:
-    """Classification metric
+class ClassificationMetrics(BaseMetrics):
+    """Classification metrics
 
-    This modulel is metric for classification.
+    This module is metrics for classification.
 
     Attributes:
         num_class: Number of classes.
@@ -38,34 +40,35 @@ class ClassificationMetric:
 
         """
 
+        super().__init__(cfg, init_best_score=0.0)
+
         self.num_class = cfg.data.dataset.num_class
         self.classes = cfg.data.dataset.classes
         self.eps = 1e-9
-
-        self.loss_list = []
         self.cmx = torch.zeros(self.num_class, self.num_class, dtype=torch.int64)
 
 
-    def update(self, preds, targets, loss) -> None:
+    def batch_update(self, outputs, targets, loss) -> None:
         """Update loss and cmx
 
         Args:
-            preds: Predictions.
+            outputs: Outputs.
             targets: Target values.
             loss: Loss.
 
         """
 
+        super().batch_update(outputs, targets, loss)
+
+        preds = outputs.argmax(axis=1)
         stacked = torch.stack((targets, preds), dim=1)
         for p in stacked:
             tl, pl = p.tolist()
             self.cmx[tl, pl] = self.cmx[tl, pl] + 1
 
-        self.loss_list.append(loss)
-
         
-    def calc(self, epoch: int, mode: str) -> None:
-        """Calculate metrics
+    def epoch_update(self, epoch: int, mode: str) -> None:
+        """Calculate metrics for each epoch
         
         Calculates accuracy, loss, precision, recall and f1score.
         
@@ -107,6 +110,7 @@ class ClassificationMetric:
         if mlflow.active_run():
             mlflow.log_metrics(metrics, step = epoch)
         self.model_score = acc
+        self.reset_states()
         
 
     def reset_states(self) -> None:
@@ -116,5 +120,17 @@ class ClassificationMetric:
 
         """
 
-        self.loss_list = []
+        super().reset_states()
         self.cmx = torch.zeros(self.num_class, self.num_class, dtype=torch.int64)
+
+
+    def judge_update_ckpt(self) -> bool:
+        """Judge whether ckpt should be updated or not"""
+        
+        if self.model_score > self.best_score:
+            self.best_score = self.model_score
+            
+            return True
+            
+        else:
+            return False
