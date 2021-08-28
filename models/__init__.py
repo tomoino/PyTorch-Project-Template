@@ -5,9 +5,14 @@ This is the module for models.
 
 """
 
-from configs.supported_info import SUPPORTED_MODEL
 from models.networks.resnet18 import ResNet18
 from models.networks.simple_cnn import SimpleCNN
+
+
+SUPPORTED_MODEL = {
+    "resnet18": ResNet18,
+    "simple_cnn": SimpleCNN,
+}
 
 
 def get_model(cfg: object) -> object:
@@ -31,7 +36,4 @@ def get_model(cfg: object) -> object:
     if model_name not in SUPPORTED_MODEL:
         raise NotImplementedError('The model is not supported.')
 
-    if model_name == "resnet18":
-        return ResNet18(cfg)
-    elif model_name == "simple_cnn":
-        return SimpleCNN(cfg)  
+    return SUPPORTED_MODEL[model_name](cfg)
