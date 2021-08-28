@@ -8,7 +8,10 @@ These functions are for optimizers.
 import torch.optim as optim
 import torch.nn as nn
 
-from configs.supported_info import SUPPORTED_OPTIMIZER
+
+SUPPORTED_OPTIMIZER = {
+    "adam": None,
+}
 
 
 def get_optimizer(cfg: object, network: object) -> object:
@@ -40,3 +43,6 @@ def get_optimizer(cfg: object, network: object) -> object:
         return optim.Adam(network.parameters(),
                           lr=cfg.train.optimizer.lr,
                           weight_decay=cfg.train.optimizer.decay)
+
+    else:
+        return SUPPORTED_OPTIMIZER[optimizer_name](cfg, network)
