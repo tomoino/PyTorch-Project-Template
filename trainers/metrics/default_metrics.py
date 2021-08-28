@@ -8,11 +8,13 @@ from statistics import mean
 import torch
 import mlflow
 
+from trainers.metrics.base_metrics import BaseMetrics
+
 
 log = logging.getLogger(__name__)
 
 
-class DefaultMetrics:
+class DefaultMetrics(BaseMetrics):
     """Default metrics
 
     This module is simple metrics using loss.
@@ -35,8 +37,7 @@ class DefaultMetrics:
 
         """
 
-        self.loss_list = []
-        self.best_score = math.inf
+        super().__init__(cfg, init_best_score=math.inf)
 
 
     def batch_update(self, outputs, targets, loss) -> None:
@@ -49,7 +50,7 @@ class DefaultMetrics:
 
         """
 
-        self.loss_list.append(loss)
+        super().batch_update(outputs, targets, loss)
 
         
     def epoch_update(self, epoch: int, mode: str) -> None:
@@ -92,7 +93,7 @@ class DefaultMetrics:
 
         """
 
-        self.loss_list = []
+        super().reset_states()
 
 
     def judge_update_ckpt(self) -> bool:
