@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 """Balanced Batch Sampler"""
 
-from torch.utils.data.sampler import BatchSampler, RandomSampler
+from omegaconf import DictConfig
+
+from torch.utils.data.sampler import BatchSampler, SequentialSampler, RandomSampler
+from data.sampler.base_sampler import BaseSampler
 
 
-class BalancedBatchSampler(BatchSampler):
+class _BalancedBatchSampler(BatchSampler):
     """Balanced Batch Sampler"""
 
 
@@ -47,3 +50,26 @@ class BalancedBatchSampler(BatchSampler):
 
     def __len__(self) -> int:
         return len(self.sampler) // self.batch_size
+
+
+class BalancedBatchSampler(BaseSampler):
+    """Balanced Batch Sampler"""
+
+    def __init__(self, cfg: DictConfig, mode: str, dataset: object) -> None:
+        """Initialization
+
+        Args:
+            cfg: Config.
+            mode: Mode. 
+                trainval: For trainning and validation.
+                test: For test.
+
+        """
+
+        super().__init__(cfg, mode)
+        if mode == "trainval":
+            self.train = _BalancedBatchSampler(cfg, dataset=dataset.train)
+            self.val = BatchSampler(SequentialSampler(dataset.val), batch_size=cfg.train.batch_size, drop_last=False)
+
+        elif mode == "test":
+            self.test = BatchSampler(SequentialSampler(dataset.test), batch_size=cfg.train.batch_size, drop_last=False)
