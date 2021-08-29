@@ -4,4 +4,7 @@ torchtext==0.8.0
 torchvision==0.8.2
 hydra-core==1.0.6
 mlflow==1.14.1
+plotly==5.2.1
+jupyterlab>=3
+ipywidgets>=7.6
 flake8
