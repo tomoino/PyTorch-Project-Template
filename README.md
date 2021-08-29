@@ -44,6 +44,13 @@ You can use MLflow to check the results of your experiment.
 Access http://localhost:5000/ from your browser.
 If necessary, you can edit env.sh to change the port.
 
+### Jupyter Lab
+You can experiment with JupyterLab.
+```bash
+jupyterlab
+```
+
+
 ## How to customize
 ### Add dataset
 1. Add module to data/dataset/ (Inherit BaseDataset module)

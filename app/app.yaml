@@ -1,0 +1,42 @@
+# Default settings for app without hydra
+
+# MLflow configs
+experiment:
+  name: App
+
+# Data configsa
+data:
+  dataset:
+    name: cifar10
+    rootdir: /workspace/datasets
+    num_train_samples: 40000
+    in_channel: 3
+    num_class: 10
+    classes: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+  sampler:
+    name: balanced_batch_sampler
+
+# Training configs
+train:
+  batch_size: 10
+  epochs: 1
+  save_best_ckpt: True
+  num_workers: 2
+  ckpt_path: best_ckpt.pth
+  eval: False
+  optimizer:
+    name: adam
+    lr: 0.0001
+    decay: 0.0001
+  trainer:
+    name: default
+  criterion:
+    name: cross_entropy
+  metrics:
+    name: classification
+
+# Model configsa
+model:
+  name: simple_cnn
+  pretrained: False
+  initial_ckpt: 

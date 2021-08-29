@@ -48,7 +48,7 @@ ENV PYTHONPATH "/workspace:${PYTHONPATH}"
 ENV PIP_OPTIONS "--no-cache-dir --progress-bar off"
 RUN pip3 install -U pip && \
     pip3 install ${PIP_OPTIONS} -r $WORK_PATH/docker/requirements.txt && \
-		pip3 install ${PIP_OPTIONS} -U setuptools
+	pip3 install ${PIP_OPTIONS} -U setuptools
 
 # nvidia
 # WORKDIR /tmp/apex/

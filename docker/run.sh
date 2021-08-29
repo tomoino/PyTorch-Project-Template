@@ -8,6 +8,7 @@ docker run \
   --gpus all \
   -v $PWD:/workspace \
   -p $MLFLOW_HOST_PORT:$MLFLOW_CONTAINER_PORT \
+  -p $JUPYTER_HOST_PORT:$JUPYTER_CONTAINER_PORT \
   --name $CONTAINER_NAME\
   --rm \
   --shm-size=2g \
